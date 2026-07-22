@@ -1,20 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<script>
-
-const path =
-    location.pathname +
-    location.search +
-    location.hash;
-
-location.replace(
-    "/tdss/?route=" +
-    encodeURIComponent(path)
-);
-
-</script>
+  <meta charset="utf-8">
+  <script>
+    var yol = window.location.pathname;
+    
+    // Eğer girilen adres "/s/" ile başlıyorsa
+    if (yol.startsWith("/s/")) {
+        // "/s/" parçasını ayırıp sadece kelimeyi alıyoruz
+        var kelime = yol.substring(3);
+        // İsteği senin fiziksel sözlük sayfana sorgu olarak iletiyoruz
+        window.location.replace("/s/index.html?" + kelime);
+    } else {
+        // "/s/" ile başlamayan diğer hatalı sayfalar için kök ana sayfaya yolla
+        window.location.replace("/?" + yol);
+    }
+  </script>
 </head>
 <body></body>
 </html>

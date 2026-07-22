@@ -1,24 +1,20 @@
-async function loadFromUrl() {
-
-    const kelime = Url.getWord();
-
-    const madde = Url.getEntry();
-
-    if (!kelime)
-        return;
-
-    // Şimdilik sahte veri
-    const veri = await Api.getWord(kelime);
-
-    olusturSekmeler(veri);
-
-    if (madde != null) {
-
-        const btn = document.querySelectorAll(".entry-tab")[madde];
-
-        if (btn)
-            btn.click();
-
+function loadFromUrl() {
+    // Soru işaretinden sonraki kısmı alıyoruz
+    var aranan = window.location.search.substring(1);
+    
+    if (aranan) {
+        // Türkçe harfleri ve boşlukları okunabilir formata dönüştür
+        var kelime = decodeURIComponent(aranan);
+        
+        // Adres çubuğunu kullanıcının görmek istediği yapıya geri çevir
+        window.history.replaceState(null, null, "/s/" + kelime);
+        
+        // Burada veriyi ekrana basacak asıl işlevini çağırmalısın
+        // Örneğin: sözlükVerisiniYükle(kelime);
+    } else {
+        // Doğrudan /s/ adresine girildiyse yapılacak işlem
+        console.log("Herhangi bir kelime aranmadı.");
     }
-
 }
+
+window.onload = loadFromUrl;
