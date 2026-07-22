@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TDSS - Türk Dili Sanal Sözlüğü</title>
+    
+    <script>
+        const params = new URLSearchParams(location.search);
+
+        const route = params.get("route");
+
+        if(route){
+
+            history.replaceState(
+                {},
+                "",
+                route
+            );
+
+        }
+    </script>
+
+    <style>
+        :root {
+            --primary-red: #c8102e;
+            --dark-red: #900c21;
+            --border-color: #e0e0e0;
+            --line-color: #d0d5dd;
+            --text-dark: #2c3e50;
+            --text-muted: #6c757d;
+            --link-blue: #0056b3;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            /* font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; */
+        }
+
+        body {
+            background-color: #ffffff;
+            color: var(--text-dark);
+            line-height: 1.5;
+            font-family:"Noto Sans",sans-serif;
+        }
+
+        /* Üst Bilgi Çubuğu */
+        .top-bar {
+            background-color: var(--primary-red);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 24px;
+            font-size: 14px;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .logo-letters {
+            display: flex;
+            gap: 2px;
+        }
+
+        .logo-box {
+            background-color: white;
+            color: var(--primary-red);
+            font-weight: 800;
+            font-size: 18px;
+            width: 26px;
+            height: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 2px;
+        }
+
+        .brand-title {
+            font-family:"IBM Plex Sans",sans-serif;
+            font-weight: 500;
+            font-size: 15px;
+            letter-spacing: 0.3px;
+        }
+
+        .top-nav {
+            display: flex;
+            gap: 10px;
+        }
+
+        .top-btn {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 4px 12px;
+            border-radius: 3px;
+            font-size: 13px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .top-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Konteyner ve Sayfa Düzeni */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Arama Alanı */
+        .search-section {
+            margin: 25px 0 35px 0;
+            max-width: 820px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 0px;
+            align-items: center;
+        }
+
+        .search-input {
+            font-family:"Inter",sans-serif;
+            flex: 1;
+            padding: 9px 14px;
+            font-size: 15px;
+            border: 1px solid #ccc;
+            border-radius: 0px;
+            outline: none;
+            height: 38px;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary-red);
+        }
+
+        .search-btn {
+            background-color: var(--primary-red);
+            border: none;
+            width: 42px;
+            height: 38px;
+            border-radius: 0px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+
+        .search-btn:hover {
+            background-color: var(--dark-red);
+        }
+
+        .help-btn {
+            background-color: #f1f3f5;
+            border: 1px solid #ccc;
+            width: 38px;
+            height: 38px;
+            border-radius: 0px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .help-btn:hover {
+            background-color: #e9ecef;
+        }
+
+        /* İki Kolonlu Sayfa Düzeni */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 260px; /* Sağ sütun inceltildi, ana içerik büyütüldü */
+            gap: 36px;
+            margin-bottom: 50px;
+        }
+
+        /* Sol Panel: İçerik Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .card {
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-header-line {
+            border-bottom: 1px solid var(--line-color);
+            padding-bottom: 4px;
+            margin-bottom: 8px;
+        }
+
+        .card-title {
+            color: var(--primary-red);
+            font-size: 17px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .card-title:hover {
+            text-decoration: underline;
+        }
+
+        .card-subtitle {
+            font-size: 12.5px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            min-height: 36px;
+        }
+
+        .card-image-box {
+            width: 100%;
+            height: 135px;
+            background-color: #f8f9fa;
+            border: 1px solid var(--border-color);
+            border-radius: 3px;
+            margin-bottom: 10px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-image-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-links {
+            list-style: none;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .card-links li {
+            color: var(--text-muted);
+        }
+
+        .card-links a {
+            color: var(--link-blue);
+            text-decoration: none;
+        }
+
+        .card-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* Sağ Panel: Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+            font-size: 12.5px;
+        }
+
+        .sidebar-section {
+            padding-bottom: 10px;
+        }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            border-bottom: 1px solid var(--line-color); /* Sağ sütun başlık altı çizgisi */
+            padding-bottom: 4px;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #111;
+        }
+
+        .sidebar-archive {
+            font-size: 11.5px;
+            color: var(--link-blue);
+            text-decoration: none;
+        }
+
+        .word-of-day {
+            font-family:"Source Serif 4",serif;
+            font-size: 17px;
+            font-weight: bold;
+            color: var(--primary-red);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .word-type {
+            font-style: italic;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .word-desc {
+            color: #333;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .word-body {
+            font-size: 12px;
+            color: #555;
+            text-align: justify;
+            line-height: 1.45;
+        }
+
+        .news-item {
+            margin-bottom: 12px;
+        }
+
+        .news-date {
+            font-family:"IBM Plex Mono",monospace;
+            color: var(--primary-red);
+            font-weight: 200;
+            font-size: 11px;
+            margin-right: 4px;
+        }
+
+        .news-link {
+            color: var(--link-blue);
+            text-decoration: none;
+        }
+
+        .news-link:hover {
+            text-decoration: underline;
+        }
+
+        .recent-words-list {
+            list-style: none;
+            margin-top: 6px;
+        }
+
+        .recent-words-list li {
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .social-icon {
+            width: 26px;
+            height: 26px;
+            background: #e9ecef;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-red);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 11px;
+        }
+
+        /* Alt Bilgi (Footer) */
+        footer {
+            background-color: #f8f9fa;
+            border-top: 1px solid var(--border-color);
+            padding: 25px 0 20px 0;
+            margin-top: 30px;
+        }
+
+        .footer-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .footer-brand {
+            font-weight: 700;
+            color: #333;
+            font-size: 13.5px;
+        }
+
+        .footer-apps {
+            display: flex;
+            gap: 8px;
+        }
+
+        .app-badge {
+            background-color: #000;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            text-decoration: none;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            list-style: none;
+            font-size: 12px;
+            border-top: 1px solid #e9ecef;
+            padding-top: 18px;
+        }
+
+        .footer-links a {
+            color: var(--link-blue);
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 992px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+            .content-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Üst Bilgi Çubuğu -->
+    <header class="top-bar">
+        <a href="#" class="brand-logo">
+            <div class="logo-letters">
+                <span class="logo-box">T</span>
+                <span class="logo-box">D</span>
+                <span class="logo-box">S</span>
+                <span class="logo-box">S</span>
+            </div>
+            <span class="brand-title">Türk Dili Sanal Sözlüğü</span>
+        </a>
+        <div class="top-nav">
+            <a href="#" class="top-btn">Uygulama</a>
+            <a href="#" class="top-btn">Oturum Aç</a>
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <!-- Arama Alanı -->
+        <section class="search-section">
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="TDSS içinde ara...">
+                <!-- Arama Düğmesi (SVG Resim) -->
+                <button class="search-btn" aria-label="Ara">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </button>
+                <!-- Yardım Düğmesi (SVG Resim) -->
+                <button class="help-btn" aria-label="Yardım">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#495057" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                </button>
+            </div>
+        </section>
+
+        <!-- Ana Düzen -->
+        <div class="main-layout">
+            
+            <!-- Sol Panel: İçerik Grid -->
+            <main class="content-grid">
+                
+                <!-- Kart 1: Sözlükler -->
+                <div class="card">
+                    <div class="card-header-line">
+                        <a href="#" class="card-title">Sözlükler</a>
+                    </div>
+                    <p class="card-subtitle">Çeşitli genel ve uzmanlık sözlüklerinde 600.000'den fazla madde başı.</p>
+                    <div class="card-image-box">
+                        <svg width="100%" height="100%" viewBox="0 0 300 135" preserveAspectRatio="none">
+                            <rect width="300" height="135" fill="#f8f9fa"/>
+                            <rect x="15" y="15" width="180" height="105" fill="#ffffff" stroke="#d1d5db" stroke-width="1"/>
+                            <rect x="25" y="25" width="100" height="8" fill="#c8102e"/>
+                            <rect x="25" y="40" width="150" height="4" fill="#9ca3af"/>
+                            <rect x="25" y="48" width="130" height="4" fill="#d1d5db"/>
+                            <rect x="25" y="56" width="140" height="4" fill="#d1d5db"/>
+                            <rect x="205" y="30" width="80" height="75" fill="#e5e7eb" stroke="#d1d5db" stroke-width="1"/>
+                            <circle cx="245" cy="67" r="18" fill="#9ca3af"/>
+                        </svg>
+                    </div>
+                    <ul class="card-links">
+                        <li><a href="#">TDSS Sözlüğü</a> | <a href="#">Güncel Türkçe Sözlük</a></li>
+                        <li><a href="#">Tarihsel Sözlükler</a> | <a href="#">Terim Sözlükleri</a></li>
+                        <li><a href="#">Daha fazlası...</a></li>
+                    </ul>
+                </div>
+
+                <!-- Kart 2: Metin Derlemleri -->
+                <div class="card">
+                    <div class="card-header-line">
+                        <a href="#" class="card-title">Metin Derlemleri</a>
+                    </div>
+                    <p class="card-subtitle">Tarihsel ve çağdaş yazılı kaynaklardan süzülmüş milyarlarca belge.</p>
+                    <div class="card-image-box">
+                        <svg width="100%" height="100%" viewBox="0 0 300 135" preserveAspectRatio="none">
+                            <rect width="300" height="135" fill="#ffffff"/>
+                            <rect x="10" y="10" width="280" height="115" fill="#f3f4f6" stroke="#e5e7eb"/>
+                            <line x1="110" y1="10" x2="110" y2="125" stroke="#d1d5db" stroke-width="1"/>
+                            <rect x="20" y="25" width="80" height="6" fill="#9ca3af"/>
+                            <rect x="120" y="25" width="40" height="6" fill="#c8102e"/>
+                            <rect x="165" y="25" width="100" height="6" fill="#6b7280"/>
+                            <rect x="20" y="45" width="70" height="6" fill="#9ca3af"/>
+                            <rect x="120" y="45" width="40" height="6" fill="#c8102e"/>
+                            <rect x="165" y="45" width="80" height="6" fill="#6b7280"/>
+                            <rect x="20" y="65" width="85" height="6" fill="#9ca3af"/>
+                            <rect x="120" y="65" width="40" height="6" fill="#c8102e"/>
+                            <rect x="165" y="65" width="110" height="6" fill="#6b7280"/>
+                        </svg>
+                    </div>
+                    <ul class="card-links">
+                        <li><a href="#">TDSS Ana Derlemi</a> | <a href="#">Gazete Derlemi</a></li>
+                        <li><a href="#">Edebi Metinler Derlemi</a> | <a href="#">Yasa Metinleri</a></li>
+                        <li><a href="#">Daha fazlası...</a></li>
+                    </ul>
+                </div>
+
+                <!-- Kart 3: Sayımlamalar -->
+                <div class="card">
+                    <div class="card-header-line">
+                        <a href="#" class="card-title">Sayımlamalar</a>
+                    </div>
+                    <p class="card-subtitle">Sözcük sıklıkları, coğrafi haritalar ve zaman içindeki kullanım değişimleri.</p>
+                    <div class="card-image-box">
+                        <svg width="100%" height="100%" viewBox="0 0 300 135" preserveAspectRatio="none">
+                            <rect width="300" height="135" fill="#f9fafb"/>
+                            <path d="M30,100 L70,70 L120,85 L180,30 L230,50 L270,20" fill="none" stroke="#c8102e" stroke-width="2"/>
+                            <rect x="40" y="80" width="12" height="30" fill="#9ca3af"/>
+                            <rect x="90" y="60" width="12" height="50" fill="#9ca3af"/>
+                            <rect x="140" y="40" width="12" height="70" fill="#c8102e"/>
+                            <rect x="190" y="65" width="12" height="45" fill="#9ca3af"/>
+                            <rect x="240" y="30" width="12" height="80" fill="#c8102e"/>
+                            <line x1="20" y1="110" x2="280" y2="110" stroke="#6b7280" stroke-width="1"/>
+                        </svg>
+                    </div>
+                    <ul class="card-links">
+                        <li><a href="#">Zaman Çizgisi</a> | <a href="#">Coğrafi Dağılım</a></li>
+                        <li><a href="#">Eş Dizimler</a> | <a href="#">Veri İndirme</a></li>
+                    </ul>
+                </div>
+
+                <!-- Kart 4: Canlı Arama -->
+                <div class="card">
+                    <div class="card-header-line">
+                        <a href="#" class="card-title">TDSS Canlı Arama</a>
+                    </div>
+                    <p class="card-subtitle">Şu anda kullanıcılar tarafından aranan güncel maddeler.</p>
+                    <div class="card-image-box">
+                        <svg width="100%" height="100%" viewBox="0 0 300 135">
+                            <rect width="300" height="135" fill="#1e293b"/>
+                            <circle cx="150" cy="67" r="55" fill="none" stroke="#38bdf8" stroke-width="1.5" opacity="0.3"/>
+                            <circle cx="150" cy="67" r="40" fill="none" stroke="#38bdf8" stroke-width="2" opacity="0.6"/>
+                            <circle cx="150" cy="67" r="25" fill="none" stroke="#38bdf8" stroke-width="2.5"/>
+                            <text x="150" y="74" fill="#ffffff" font-size="22" font-weight="bold" text-anchor="middle">T</text>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Kart 5: Terim Derlemeleri -->
+                <div class="card">
+                    <div class="card-header-line">
+                        <a href="#" class="card-title">Terim Derlemeleri</a>
+                    </div>
+                    <p class="card-subtitle">Bilim, teknik ve spor alanlarına ait özenle derlenmiş terim dizelgeleri.</p>
+                    <div class="card-image-box">
+                        <svg width="100%" height="100%" viewBox="0 0 300 135">
+                            <rect width="300" height="135" fill="#4a7c59"/>
+                            <circle cx="150" cy="67" r="35" fill="none" stroke="#ffffff" stroke-width="2"/>
+                            <line x1="0" y1="67" x2="300" y2="67" stroke="#ffffff" stroke-width="2"/>
+                            <circle cx="80" cy="95" r="14" fill="#ffffff"/>
+                            <path d="M73,95 L87,95 M80,88 L80,102" stroke="#4a7c59" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <ul class="card-links">
+                        <li><a href="#">Konusal Sözlükler...</a></li>
+                    </ul>
+                </div>
+
+                <!-- Kart 6: Mobil Uygulama -->
+                <div class="card">
+                    <div class="card-header-line">
+                        <a href="#" class="card-title">Mobil Uygulama</a>
+                    </div>
+                    <p class="card-subtitle">TDSS mobil cihazlarda kesintisiz ve takılmasız çalışır.</p>
+                    <div class="card-image-box">
+                        <svg width="100%" height="100%" viewBox="0 0 300 135">
+                            <rect width="300" height="135" fill="#e2e8f0"/>
+                            <rect x="105" y="10" width="90" height="115" rx="8" fill="#1e293b"/>
+                            <rect x="110" y="18" width="80" height="95" rx="3" fill="#ffffff"/>
+                            <rect x="115" y="24" width="70" height="6" fill="#c8102e"/>
+                            <rect x="115" y="35" width="50" height="4" fill="#94a3b8"/>
+                            <rect x="115" y="43" width="60" height="4" fill="#cbd5e1"/>
+                            <circle cx="150" cy="118" r="3" fill="#94a3b8"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Kart 7: Ağ Güncesi -->
+                <div class="card">
+                    <div class="card-header-line">
+                        <a href="#" class="card-title">Ağ Güncesi</a>
+                    </div>
+                    <p class="card-subtitle">Dilbilim ve ağ haritalama üzerine güncel yazılar.</p>
+                    <div class="card-image-box">
+                        <svg width="100%" height="100%" viewBox="0 0 300 135">
+                            <rect width="300" height="135" fill="#f1f5f9"/>
+                            <path d="M 30,100 Q 80,20 150,70 T 270,30" fill="none" stroke="#c8102e" stroke-width="2.5"/>
+                            <circle cx="80" cy="48" r="5" fill="#c8102e"/>
+                            <circle cx="150" cy="70" r="5" fill="#c8102e"/>
+                            <circle cx="270" cy="30" r="5" fill="#c8102e"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Kart 8: Dil Oyunları -->
+                <div class="card">
+                    <div class="card-header-line">
+                        <a href="#" class="card-title">Dil Oyunları</a>
+                    </div>
+                    <p class="card-subtitle">Köken bilimi, yazım kuralları ve yabancı sözcük karşılıkları sınamaları.</p>
+                    <div class="card-image-box">
+                        <svg width="100%" height="100%" viewBox="0 0 300 135">
+                            <rect width="300" height="135" fill="#0f172a"/>
+                            <circle cx="70" cy="67" r="18" fill="#38bdf8" opacity="0.8"/>
+                            <circle cx="150" cy="45" r="22" fill="#818cf8" opacity="0.8"/>
+                            <circle cx="230" cy="75" r="16" fill="#f43f5e" opacity="0.8"/>
+                            <line x1="70" y1="67" x2="150" y2="45" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="4"/>
+                            <line x1="150" y1="45" x2="230" y2="75" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="4"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Kart 9: TDSS Tarihçesi -->
+                <div class="card">
+                    <div class="card-header-line">
+                        <a href="#" class="card-title">TDSS Tarihçesi</a>
+                    </div>
+                    <p class="card-subtitle">Sözlük projesinin gelişim adımları ve mimari yapısı.</p>
+                    <div class="card-image-box">
+                        <svg width="100%" height="100%" viewBox="0 0 300 135">
+                            <rect width="300" height="135" fill="#fafafa"/>
+                            <rect x="30" y="55" width="60" height="25" rx="3" fill="#ffffff" stroke="#c8102e" stroke-width="1.5"/>
+                            <rect x="120" y="55" width="60" height="25" rx="3" fill="#c8102e"/>
+                            <rect x="210" y="55" width="60" height="25" rx="3" fill="#ffffff" stroke="#c8102e" stroke-width="1.5"/>
+                            <line x1="90" y1="67" x2="120" y2="67" stroke="#6b7280" stroke-width="2"/>
+                            <line x1="180" y1="67" x2="210" y2="67" stroke="#6b7280" stroke-width="2"/>
+                        </svg>
+                    </div>
+                </div>
+
+            </main>
+
+            <!-- Sağ Panel: Sidebar -->
+            <aside class="sidebar">
+                
+                <!-- Günün Maddesi -->
+                <section class="sidebar-section">
+                    <div class="sidebar-header">
+                        <span class="sidebar-title">Günün Maddesi</span>
+                        <a href="#" class="sidebar-archive">[Arşiv]</a>
+                    </div>
+                    <a href="#" class="word-of-day">akışım</a>
+                    <div class="word-type">ad, matematik, dilbilim</div>
+                    <div class="word-desc">Bir niceliğin, bir değişkenin sürekli değişimi veya akış durumu.</div>
+                    <p class="word-body">
+                        Sözcük, Türkçe türetim kurallarına uygun olarak kelime kökünden türetilmiştir. Sürekli değişim gösteren matrisel ve eğrisel hesaplamaları tanımlamak üzere kullanılan bu terim, günümüz yayınlarında sıklıkla yer bulmaktadır.
+                    </p>
+                </section>
+
+                <!-- Duyurular -->
+                <section class="sidebar-section">
+                    <div class="sidebar-header">
+                        <span class="sidebar-title">Duyurular</span>
+                    </div>
+                    
+                    <div class="news-item">
+                        <span class="news-date">[22.07.2026]</span>
+                        <a href="#" class="news-link">Bölgesel ağ haritalama aracı güncellendi.</a>
+                        <p style="font-size:11px; color:#666; margin-top:3px;">
+                            Yeni eklenen harita katmanları ile coğrafi veri dağılımları doğrudan incelenebilir.
+                        </p>
+                    </div>
+
+                    <div class="news-item">
+                        <span class="news-date">[15.06.2026]</span>
+                        <a href="#" class="news-link">Derlem veritabanında sunucu bakımı tamamlandı.</a>
+                    </div>
+                </section>
+
+                <!-- En Yeni Maddeler -->
+                <section class="sidebar-section">
+                    <div class="sidebar-header">
+                        <span class="sidebar-title">En Yeni Maddeler</span>
+                        <a href="#" class="sidebar-archive">Rastgele Madde</a>
+                    </div>
+                    <ul class="recent-words-list">
+                        <li><a href="#" class="news-link">özümsemek</a> <span class="news-date">[21.07.2026]</span></li>
+                        <li><a href="#" class="news-link">örüt</a> <span class="news-date">[19.07.2026]</span></li>
+                        <li><a href="#" class="news-link">çözümseme</a> <span class="news-date">[18.07.2026]</span></li>
+                        <li><a href="#" class="news-link">sanal</a> <span class="news-date">[12.07.2026]</span></li>
+                    </ul>
+                    <div style="text-align:right; margin-top:8px;">
+                        <a href="#" class="sidebar-archive">[tüm maddeler ...]</a>
+                    </div>
+
+                    <!-- Sosyal Medya -->
+                    <div class="social-icons">
+                        <a href="#" class="social-icon">t</a>
+                        <a href="#" class="social-icon">m</a>
+                        <a href="#" class="social-icon">g</a>
+                    </div>
+                </section>
+
+            </aside>
+
+        </div>
+    </div>
+
+    <!-- Alt Bilgi (Footer) -->
+    <footer>
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    TDSS - Türk Dili Sanal Sözlüğü
+                </div>
+                <div class="footer-apps">
+                    <a href="#" class="app-badge">Google Play</a>
+                    <a href="#" class="app-badge">App Store</a>
+                </div>
+            </div>
+            
+            <ul class="footer-links">
+                <li><a href="#">Hakkımızda</a></li>
+                <li><a href="#">Belgelemeler</a></li>
+                <li><a href="#">Ağ Güncesi</a></li>
+                <li><a href="#">Gizlilik Sözleşmesi</a></li>
+                <li><a href="#">Kullanım Koşulları</a></li>
+                <li><a href="#">İletişim ve Geri Bildirim</a></li>
+                <li><a href="#">Künye</a></li>
+            </ul>
+        </div>
+    </footer>
+
+</body>
+</html>
