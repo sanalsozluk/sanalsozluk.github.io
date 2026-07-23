@@ -91,14 +91,11 @@
 
         .search-item{
             display:flex;
-            justify-content:space-between;
             align-items:center;
-
+            gap:6px;
             padding:10px 14px;
-
             cursor:pointer;
-
-            transition:.15s;
+            transition:background .15s;
         }
 
         .search-item:not(:last-child){
@@ -111,15 +108,20 @@
         }
 
         .search-word{
-            font-size:15px;
             font-weight:600;
-            color:#111;
+            color:#222;
+        }
+
+        .search-separator{
+            color:#9aa0a6;
+            user-select:none;
         }
 
         .search-type{
+            color:#6b7280;
             font-size:14px;
-            color:#777;
         }
+        
         .search-input { font-family: "Inter", sans-serif; flex: 1; padding: 9px 14px; font-size: 15px; border: 1px solid #ccc; border-radius: 0px; outline: none; height: 38px; }
         .search-input:focus { border-color: var(--primary-red); }
         .search-btn { background-color: var(--primary-red); border: none; width: 42px; height: 38px; border-radius: 0px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background-color 0.2s; }
@@ -1086,6 +1088,7 @@
 
                 div.innerHTML=`
                     <span class="search-word">${madde.kelime}</span>
+                    <span class="search-separator">·</span>
                     <span class="search-type">${madde.tur.ad}</span>
                 `;
 
