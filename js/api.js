@@ -43,6 +43,10 @@ const Api = {
             .ilike('madde', word.trim())
             .order('sira', { ascending: true });
 
+        console.log("Hata:", kelimelerHata);
+        console.log("Veri:", kelimelerData);
+        console.log(JSON.stringify(word));
+
         if (kelimelerHata) {
             console.error("Veritabanı sorgu hatası:", kelimelerHata);
             return { aranan: word, maddeler: [] };
