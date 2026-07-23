@@ -134,6 +134,44 @@ const Api = {
 
         return { aranan: word, maddeler };
 
-    }
+    },
+
+
+
+    async search(text) {
+        if (!text || text.trim().length < 2)
+            return [];
+
+        const { data, error } = await supabaseClient
+            .from("kelimeler")
+            .select(`
+                id,
+                madde,
+                sira,
+                tur:turler (
+                    id,
+                    ad
+                )
+            `)
+            .ilike("madde", text.trim() + "%")
+            .order("madde")
+            .order("sira")
+            .limit(14);
+
+        if (error) {
+            console.error(error);
+            return [];
+        }
+
+        return data.map(k => ({
+            id: k.id,
+            kelime: k.madde,
+            sira: k.sira,
+            tur: {
+                id: k.tur?.id ?? null,
+                ad: k.tur?.ad ?? ""
+            }
+        }));
+    },
 
 };

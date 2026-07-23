@@ -57,7 +57,69 @@
 
         /* Arama Alanı (index.html ile birebir aynı) */
         .search-section { margin: 25px 0 35px 0; max-width: 100%; display: flex; justify-content: center; }
-        .search-box { display: flex; gap: 0px; align-items: center; width: 100%; max-width: 820px; }
+        .search-box{
+            position:relative;
+            display:flex;
+            gap:0;
+            align-items:center;
+            width:100%;
+            max-width:820px;
+        }
+        .search-suggestions{
+            position:absolute;
+            left:0;
+            right:38px;
+            top:100%;
+            margin-top:2px;
+
+            background:#fff;
+
+            border:1px solid #dcdfe3;
+            border-top:none;
+
+            box-shadow:
+                0 6px 18px rgba(0,0,0,.08);
+
+            display:none;
+
+            z-index:500;
+        }
+
+        .search-suggestions.show{
+            display:block;
+        }
+
+        .search-item{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+
+            padding:10px 14px;
+
+            cursor:pointer;
+
+            transition:.15s;
+        }
+
+        .search-item:not(:last-child){
+            border-bottom:1px solid #ececec;
+        }
+
+        .search-item:hover,
+        .search-item.active{
+            background:#f7f8fa;
+        }
+
+        .search-word{
+            font-size:15px;
+            font-weight:600;
+            color:#111;
+        }
+
+        .search-type{
+            font-size:14px;
+            color:#777;
+        }
         .search-input { font-family: "Inter", sans-serif; flex: 1; padding: 9px 14px; font-size: 15px; border: 1px solid #ccc; border-radius: 0px; outline: none; height: 38px; }
         .search-input:focus { border-color: var(--primary-red); }
         .search-btn { background-color: var(--primary-red); border: none; width: 42px; height: 38px; border-radius: 0px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background-color 0.2s; }
@@ -318,6 +380,7 @@
                         <line x1="12" y1="17" x2="12.01" y2="17"></line>
                     </svg>
                 </button>
+                <div id="search-suggestions" class="search-suggestions"></div>
             </div>
         </section>
 
@@ -970,6 +1033,91 @@
             });
 
         }
+
+
+
+
+        const input=document.getElementById("search-input");
+        const suggestionBox=document.getElementById("search-suggestions");
+
+        let debounce;
+
+        input.addEventListener("input",()=>{
+
+            clearTimeout(debounce);
+
+            const text=input.value.trim();
+
+            if(text.length<2){
+
+                suggestionBox.classList.remove("show");
+                suggestionBox.innerHTML="";
+                return;
+
+            }
+
+            debounce=setTimeout(async()=>{
+
+                // BURAYI API İLE DEĞİŞTİRECEKSİN
+                const sonuc = await Api.search(text);
+
+                renderSuggestions(sonuc);
+
+            },250);
+
+        });
+
+        function renderSuggestions(liste){
+
+            suggestionBox.innerHTML="";
+
+            if(liste.length===0){
+
+                suggestionBox.classList.remove("show");
+                return;
+
+            }
+
+            liste.forEach(madde=>{
+
+                const div=document.createElement("div");
+
+                div.className="search-item";
+
+                div.innerHTML=`
+                    <span class="search-word">${madde.kelime}</span>
+                    <span class="search-type">${madde.tur.ad}</span>
+                `;
+
+                div.onclick = async () => {
+
+                    input.value = madde.kelime;
+
+                    suggestionBox.classList.remove("show");
+
+                    const veri = await Api.getWord(madde.kelime);
+
+                    olusturSekmeler(veri);
+
+                };
+
+                suggestionBox.appendChild(div);
+
+            });
+
+            suggestionBox.classList.add("show");
+
+        }
+
+        document.addEventListener("click",e=>{
+
+            if(!e.target.closest(".search-box")){
+
+                suggestionBox.classList.remove("show");
+
+            }
+
+        });
 
     </script>
 </body>
