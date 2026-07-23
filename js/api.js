@@ -38,14 +38,17 @@ const Api = {
                     anlam_etiketleri (
                         etiket:etiketler ( id, ad )
                     )
+                ),
+                kelime_iliskileri!obek_id (
+                    bilesen:kelimeler!bilesen_id (
+                        id,
+                        madde
+                    )
                 )
             `)
             .ilike('madde', word.trim())
             .order('sira', { ascending: true });
 
-        console.log("Hata:", kelimelerHata);
-        console.log("Veri:", kelimelerData);
-        console.log(JSON.stringify(word));
 
         if (kelimelerHata) {
             console.error("Veritabanı sorgu hatası:", kelimelerHata);
@@ -70,6 +73,11 @@ const Api = {
 
             // 2. Anlamları ve bağlı ilişkisel verileri (etiketler, örnekler) işleme
             const hamAnlamlar = (satir.anlamlar || []).sort((a, b) => a.sira - b.sira);
+
+            const bilesenler = (satir.kelime_iliskileri || []).map(iliski => ({
+                id: iliski.bilesen.id,
+                madde: iliski.bilesen.madde
+            }));
             
             const anlamlar = hamAnlamlar.map(anlam => {
                 // anlam_etiketleri üzerinden etiket adlarını çekme
@@ -82,12 +90,13 @@ const Api = {
                     .map(item => item.ornek)
                     .filter(Boolean);
 
+
                 return {
                     id: anlam.id,
                     sira: anlam.sira,
                     tanim: anlam.tanim,
                     etiketler: etiketler,
-                    ornekler: ornekler
+                    ornekler: ornekler,
                 };
             });
 
@@ -100,6 +109,8 @@ const Api = {
                     id: satir.tur?.id ?? null,
                     ad: satir.tur?.ad ?? ""
                 },
+
+                bilesenler: bilesenler,
 
                 // Kelime seviyesinde etiket tablosu DDL içinde bulunmuyor, boş dizi dönülüyor
                 etiketler: [],

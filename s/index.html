@@ -371,23 +371,7 @@
                     </div>
 
                     <table class="grammar-table">
-                        <tbody>
-                            <tr>
-                                <td>Dil bilgisi</td>
-                                <td data-api="grammar-info">...</td>
-                            </tr>
-                            <tr>
-                                <td>Söyleniş</td>
-                                <td data-api="pronunciation">...</td>
-                            </tr>
-                            <tr>
-                                <td>Sözcük ayrımı</td>
-                                <td data-api="syllables">...</td>
-                            </tr>
-                            <tr>
-                                <td>Söz öbekleri</td>
-                                <td data-api="etymology-short">...</td>
-                            </tr>
+                        <tbody data-api="grammar-table">
                         </tbody>
                     </table>
 
@@ -683,25 +667,11 @@
             
             document.getElementById("overview-page").style.display="none";
             document.getElementById("entry-page").style.display="";
-
             document.querySelector("[data-api='word-title']").textContent =
                 madde.kelime +
                 (toplamMadde > 1 ? ustSayi(madde.sira) : "");
 
-            document.querySelector("[data-api='grammar-info']").textContent =
-                madde.tur.ad +
-                (madde.etiketler.length
-                    ? " (" + madde.etiketler.join(", ") + ")"
-                    : "");
-
-            document.querySelector("[data-api='pronunciation']").textContent =
-                madde.telaffuz.ipa ?? "";
-
-            document.querySelector("[data-api='syllables']").textContent =
-                madde.heceleme.join(" · ");
-
-            document.querySelector("[data-api='etymology-short']").textContent =
-                madde.koken.kisa;
+            renderBilgiler(madde);
 
             document.querySelector("[data-api='etymology-detailed']").textContent =
                 madde.koken.aciklama;
@@ -709,6 +679,67 @@
             renderAnlamlar(madde.anlamlar);
             guncelleSolMenu();
 
+        }
+
+        function renderBilgiler(madde){
+            const tbody=document.querySelector("[data-api='grammar-table']");
+            tbody.innerHTML="";
+            satirEkle(
+                "Dil bilgisi",
+                madde.tur.ad +
+                (madde.etiketler.length
+                    ? " (" + madde.etiketler.join(", ") + ")"
+                    : "")
+            );
+            satirEkle(
+                "Söyleniş",
+                madde.telaffuz.ipa ?? ""
+            );
+            if(madde.tur.ad==="Söz Öbeği"){
+
+                satirEkleBaglantilar(
+                    "Bileşenler",
+                    madde.bilesenler
+                );
+            }else{
+                satirEkle(
+                    "Sözcük ayrımı",
+                    madde.heceleme.join(" · ")
+                );
+                satirEkleBaglantilar(
+                    "Söz öbekleri",
+                    madde.sozObekleri
+                );
+            }
+            function satirEkle(baslik,icerik){
+                const tr=document.createElement("tr");
+                tr.innerHTML=`
+                    <td>${baslik}</td>
+                    <td>${icerik || ""}</td>
+                `;
+                tbody.appendChild(tr);
+            }
+            function satirEkleBaglantilar(baslik,liste){
+                const tr=document.createElement("tr");
+                const td1=document.createElement("td");
+                td1.textContent=baslik;
+                const td2=document.createElement("td");
+                if(liste && liste.length){
+                    liste.forEach((oge,index)=>{
+                        const a=document.createElement("a");
+                        a.href="/s/"+encodeURIComponent(oge.madde);
+                        a.textContent=oge.madde;
+                        td2.appendChild(a);
+                        if(index<liste.length-1){
+                            td2.append(", ");
+                        }
+                    });
+                }else{
+                    td2.textContent="";
+                }
+                tr.append(td1,td2);
+                tbody.appendChild(tr);
+            }
         }
 
 
