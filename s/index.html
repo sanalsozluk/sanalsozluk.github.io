@@ -373,7 +373,7 @@
                     <table class="grammar-table">
                         <tbody>
                             <tr>
-                                <td>Dilbilgisi</td>
+                                <td>Dil bilgisi</td>
                                 <td data-api="grammar-info">...</td>
                             </tr>
                             <tr>
@@ -381,11 +381,11 @@
                                 <td data-api="pronunciation">...</td>
                             </tr>
                             <tr>
-                                <td>Sözcük Ayrımı</td>
+                                <td>Sözcük ayrımı</td>
                                 <td data-api="syllables">...</td>
                             </tr>
                             <tr>
-                                <td>Türetim</td>
+                                <td>Söz öbekleri</td>
                                 <td data-api="etymology-short">...</td>
                             </tr>
                         </tbody>
@@ -677,7 +677,7 @@
         };
 
         // DOM yüklendiğinde API verisini sayfaya basan işlev
-        function renderMadde(madde){
+        function renderMadde(madde, toplamMadde){
 
             document.getElementById("scroll-spy-nav").style.display="";
             
@@ -685,7 +685,8 @@
             document.getElementById("entry-page").style.display="";
 
             document.querySelector("[data-api='word-title']").textContent =
-                madde.kelime + ustSayi(madde.sira);
+                madde.kelime +
+                (toplamMadde > 1 ? ustSayi(madde.sira) : "");
 
             document.querySelector("[data-api='grammar-info']").textContent =
                 madde.tur.ad +
@@ -792,7 +793,7 @@
 
                 selector.classList.add("hidden");
 
-                renderMadde(veri.maddeler[0]);
+                renderMadde(veri.maddeler[0], veri.maddeler.length);
 
                 return;
             }
@@ -825,13 +826,15 @@
 
                     btn.className="entry-tab";
 
-                    btn.textContent = madde.kelime + ustSayi(madde.sira);
+                    btn.textContent =
+                        madde.kelime +
+                        (veri.maddeler.length > 1 ? ustSayi(madde.sira) : "");
 
                     btn.onclick=()=>{
 
                         aktifSekme(btn);
 
-                        renderMadde(madde);
+                        renderMadde(madde, veri.maddeler.length);
 
                     };
 
@@ -903,7 +906,7 @@
                 link.onclick=()=>{
 
                     document
-                    .querySelectorAll(".entry-tab")[index + 1]
+                    .querySelectorAll(".entry-tab")[madde.sira]
                     .click();
 
                 };
