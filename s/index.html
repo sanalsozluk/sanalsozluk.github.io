@@ -121,7 +121,11 @@
             color:#6b7280;
             font-size:14px;
         }
-        
+
+        .search-item.selected{
+            background:#f2f4f7;
+        }
+
         .search-input { font-family: "Inter", sans-serif; flex: 1; padding: 9px 14px; font-size: 15px; border: 1px solid #ccc; border-radius: 0px; outline: none; height: 38px; }
         .search-input:focus { border-color: var(--primary-red); }
         .search-btn { background-color: var(--primary-red); border: none; width: 42px; height: 38px; border-radius: 0px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background-color 0.2s; }
@@ -852,16 +856,25 @@
 
         // Sayfa açıldığında API'yi çalıştır
         document.addEventListener("DOMContentLoaded", () => {
+            const input = document.getElementById("search-input");
+            input.focus();
+            input.setSelectionRange(input.value.length, input.value.length);
             loadFromUrl();
         });
 
         // Arama simülasyonu
-        function searchWord() {
-            const input = document.getElementById('search-input').value;
-            if(input.trim() !== '') {
-                console.log("API'ye aranacak kelime gönderiliyor: " + input);
-                // Burada fetch() ile yeni kelime çekilip olusturSekmeler(yeniVeri) çağrılabilir.
-            }
+        async function searchWord(){
+
+            const kelime=input.value.trim();
+
+            if(!kelime) return;
+
+            suggestionBox.classList.remove("show");
+
+            const veri=await Api.getWord(kelime);
+
+            olusturSekmeler(veri);
+
         }
 
         const ustSimge=["⁰","¹","²","³","⁴","⁵","⁶","⁷","⁸","⁹"];
@@ -1038,6 +1051,7 @@
 
 
 
+        let selectedIndex = -1;
 
         const input=document.getElementById("search-input");
         const suggestionBox=document.getElementById("search-suggestions");
@@ -1070,6 +1084,7 @@
         });
 
         function renderSuggestions(liste){
+            selectedIndex=-1;
 
             suggestionBox.innerHTML="";
 
@@ -1099,6 +1114,7 @@
                     suggestionBox.classList.remove("show");
 
                     const veri = await Api.getWord(madde.kelime);
+                    history.pushState({}, "", "/s/"+encodeURIComponent(madde.kelime));
 
                     olusturSekmeler(veri);
 
@@ -1121,6 +1137,77 @@
             }
 
         });
+
+        input.addEventListener("keydown", (e) => {
+
+            const items = suggestionBox.querySelectorAll(".search-item");
+
+            if (!items.length) return;
+
+            if (e.key === "ArrowDown") {
+
+                e.preventDefault();
+
+                selectedIndex++;
+
+                if (selectedIndex >= items.length)
+                    selectedIndex = 0;
+
+                updateSelection(items);
+
+            }
+
+            else if (e.key === "ArrowUp") {
+
+                e.preventDefault();
+
+                selectedIndex--;
+
+                if (selectedIndex < 0)
+                    selectedIndex = items.length - 1;
+
+                updateSelection(items);
+
+            }
+
+            else if(e.key==="Tab"){
+
+                if(selectedIndex>=0){
+
+                    e.preventDefault();
+
+                    items[selectedIndex].click();
+
+                }
+            }
+
+            else if(e.key==="Enter"){
+
+                e.preventDefault();
+
+                if(selectedIndex>=0){
+
+                    items[selectedIndex].click();
+
+                }else{
+
+                    searchWord();
+
+                }
+            }
+        });
+
+        function updateSelection(items){
+
+            items.forEach(item=>item.classList.remove("selected"));
+
+            if(selectedIndex>=0){
+
+                items[selectedIndex].classList.add("selected");
+
+            }
+
+        }
 
     </script>
 </body>
