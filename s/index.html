@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TDSS - Sözlük Maddesi</title>
+    <title>TDSS - Sözlük</title>
     <!-- Gerekli yazı tipleri (Ağ üzerinden çekildiğini varsayıyoruz, index.html'ye uyumlu) -->
     <style>
         :root {
@@ -276,7 +276,7 @@
     </style>
 
     <script src="/js/url.js"></script>
-    <script src="/js/api.js"></script>
+    <script type="module" src="/js/api.js"></script>
     <script src="/js/main.js"></script>
 </head>
 <body>
@@ -902,7 +902,7 @@
                 link.onclick=()=>{
 
                     document
-                    .querySelectorAll(".entry-tab")[madde.sira]
+                    .querySelectorAll(".entry-tab")[index + 1]
                     .click();
 
                 };
