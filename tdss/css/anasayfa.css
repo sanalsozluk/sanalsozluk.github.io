@@ -1,0 +1,234 @@
+:root {
+    /* Renk Değişkenleri */
+    --ana-renk: #cc0000;
+    --ana-renk-koyu: #990000;
+    --arka-plan: #f4f6f9;
+    --kutu-arka-plan: #ffffff;
+    --metin-renk: #333333;
+    --gri-metin: #666666;
+    --sinir-renk: #dddddd;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--arka-plan);
+    color: var(--metin-renk);
+    line-height: 1.6;
+}
+
+/* Üst Bilgi (Header) */
+.ust-bilgi {
+    background-color: var(--ana-renk);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+.logo-alani {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo {
+    background-color: white;
+    color: var(--ana-renk);
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+}
+
+.site-adi {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.giris-dugmesi {
+    background-color: white;
+    color: var(--ana-renk);
+    border: none;
+    padding: 8px 15px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.giris-dugmesi:hover {
+    background-color: #f0f0f0;
+}
+
+/* Arama Alanı */
+.arama-alani {
+    background-color: white;
+    padding: 30px 20px;
+    display: flex;
+    justify-content: center;
+    border-bottom: 1px solid var(--sinir-renk);
+}
+
+.arama-kutusu {
+    display: flex;
+    width: 100%;
+    max-width: 800px;
+}
+
+.arama-kutusu input {
+    flex: 1;
+    padding: 12px 15px;
+    font-size: 16px;
+    border: 1px solid var(--sinir-renk);
+    border-right: none;
+    border-radius: 4px 0 0 4px;
+    outline: none;
+}
+
+.arama-kutusu button {
+    background-color: var(--ana-renk);
+    color: white;
+    border: none;
+    padding: 0 25px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 0 4px 4px 0;
+}
+
+.arama-kutusu button:hover {
+    background-color: var(--ana-renk-koyu);
+}
+
+/* Ana İçerik ve Izgara */
+.ana-icerik {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 1400px;
+    margin: 20px auto;
+    padding: 0 20px;
+    gap: 20px;
+}
+
+.icerik-izgarasi {
+    flex: 3;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+/* Yan Çubuk */
+.yan-cubuk {
+    flex: 1;
+    min-width: 250px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Kart Yapısı */
+.kart, .gunun-sozcugu, .guncel-haberler {
+    background-color: var(--kutu-arka-plan);
+    border: 1px solid var(--sinir-renk);
+    padding: 15px;
+    border-radius: 4px;
+}
+
+.kart h3, .yan-cubuk h3 {
+    color: var(--ana-renk);
+    font-size: 16px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid var(--sinir-renk);
+    padding-bottom: 5px;
+}
+
+.kart p, .yan-cubuk p {
+    font-size: 14px;
+    color: var(--gri-metin);
+    margin-bottom: 15px;
+}
+
+.kart-gorsel {
+    height: 120px;
+    background-color: #ffe6e6;
+    border: 1px dashed var(--ana-renk);
+    border-radius: 4px;
+}
+
+/* Yan Çubuk Detayları */
+.gunun-sozcugu h4 {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.okuma-baglantisi {
+    font-size: 13px;
+    color: var(--ana-renk);
+    text-decoration: none;
+}
+
+.guncel-haberler ul {
+    list-style-type: none;
+}
+
+.guncel-haberler li {
+    font-size: 13px;
+    margin-bottom: 10px;
+    color: var(--gri-metin);
+}
+
+/* Alt Bilgi (Footer) */
+.alt-bilgi {
+    text-align: center;
+    padding: 30px 20px;
+    background-color: white;
+    border-top: 1px solid var(--sinir-renk);
+    margin-top: 40px;
+}
+
+.alt-baglantilar {
+    margin-bottom: 15px;
+}
+
+.alt-baglantilar a {
+    color: var(--ana-renk);
+    text-decoration: none;
+    margin: 0 10px;
+    font-size: 14px;
+}
+
+.alt-baglantilar a:hover {
+    text-decoration: underline;
+}
+
+.alt-bilgi p {
+    font-size: 13px;
+    color: var(--gri-metin);
+}
+
+/* Mobil Uyumluluk */
+@media (max-width: 1024px) {
+    .icerik-izgarasi {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .ana-icerik {
+        flex-direction: column;
+    }
+    .icerik-izgarasi {
+        grid-template-columns: 1fr;
+    }
+    .ust-bilgi {
+        flex-direction: column;
+        gap: 15px;
+    }
+}

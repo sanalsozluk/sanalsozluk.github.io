@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script>
+    var yol = window.location.pathname;
+    var hash = window.location.hash; // "#2" gibi madde numarası, varsa
+
+    if (yol.startsWith("/s/")) {
+        // "/s/" kısmını atıp kelimeyi çıkarıyoruz
+        var kelime = decodeURIComponent(yol.substring(3));
+        // Kelimeyi encode ederek fiziksel sayfaya query olarak iletiyoruz,
+        // madde numarası varsa (#hash) sonuna aynen ekliyoruz
+        window.location.replace("/s/index.html?kelime=" + encodeURIComponent(kelime) + hash);
+    } else {
+        // "/s/" ile başlamayan diğer adresler için köke gönder
+        var tamYol = yol + window.location.search + hash;
+        window.location.replace("/?redirect=" + encodeURIComponent(tamYol));
+    }
+  </script>
+</head>
+<body></body>
+</html>
