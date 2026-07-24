@@ -12,13 +12,15 @@ const Api = {
 
         if (!word || !word.trim()) return { aranan: word, maddeler: [] };
 
-        // SQL şemasına tam uyumlu ilişkisel Supabase sorgusu
+        // SQL şemasına tam uyumlu ilişkisel ve iki yönlü Supabase sorgusu
         const { data: kelimelerData, error: kelimelerHata } = await supabaseClient
             .from('kelimeler')
             .select(`
                 id,
                 madde,
+                kok,
                 sira,
+                guncelleme_tarihi,
                 tur:turler ( id, ad ),
                 koken:kokenler (
                     id,
@@ -39,8 +41,14 @@ const Api = {
                         etiket:etiketler ( id, ad )
                     )
                 ),
-                kelime_iliskileri!obek_id (
+                obek_iliskileri:kelime_iliskileri!obek_id (
                     bilesen:kelimeler!bilesen_id (
+                        id,
+                        madde
+                    )
+                ),
+                bilesen_iliskileri:kelime_iliskileri!bilesen_id (
+                    obek:kelimeler!obek_id (
                         id,
                         madde
                     )
@@ -59,37 +67,41 @@ const Api = {
             return { aranan: word, maddeler: [] };
         }
 
-        // Veritabanı çıktısını arayüzün (renderMadde / olusturSekmeler) beklediği formata dönüştürme
+        // Veritabanı çıktısını arayüzün beklediği yapıya dönüştürme
         const maddeler = kelimelerData.map(satir => {
 
             // 1. Telaffuz ve heceleme verisini işleme
             const ilkTelaffuz = satir.telaffuzlar?.[0] || null;
             const rawHece = ilkTelaffuz?.heceleme;
             
-            // Heceleme metnini noktalardan/çizgilerden ayırıp diziye dönüştürme
+            // Heceleme metnini noktalardan veya çizgilerden ayırıp diziye dönüştürme
             const hecelemeListesi = rawHece 
                 ? rawHece.split(/[\s·\-,]+/).filter(Boolean)
                 : [];
 
-            // 2. Anlamları ve bağlı ilişkisel verileri (etiketler, örnekler) işleme
+            // 2. Anlamları ve bağlı ilişkisel verileri işleme
             const hamAnlamlar = (satir.anlamlar || []).sort((a, b) => a.sira - b.sira);
 
-            const bilesenler = (satir.kelime_iliskileri || []).map(iliski => ({
-                id: iliski.bilesen.id,
-                madde: iliski.bilesen.madde
-            }));
+            // Aranan kelime bir söz öbeği ise, onu oluşturan alt bileşenler
+            const bilesenler = (satir.obek_iliskileri || []).map(iliski => ({
+                id: iliski.bilesen?.id,
+                madde: iliski.bilesen?.madde
+            })).filter(b => b.id); // Boş gelenleri temizleme
             
+            // Aranan kelimenin içinde geçtiği büyük söz öbekleri
+            const soz_obekleri = (satir.bilesen_iliskileri || []).map(iliski => ({
+                id: iliski.obek?.id,
+                madde: iliski.obek?.madde
+            })).filter(o => o.id); // Boş gelenleri temizleme
+
             const anlamlar = hamAnlamlar.map(anlam => {
-                // anlam_etiketleri üzerinden etiket adlarını çekme
                 const etiketler = (anlam.anlam_etiketleri || [])
                     .map(item => item.etiket?.ad)
                     .filter(Boolean);
 
-                // ornekler tablosundan örnek metinlerini çekme
                 const ornekler = (anlam.ornekler || [])
                     .map(item => item.ornek)
                     .filter(Boolean);
-
 
                 return {
                     id: anlam.id,
@@ -104,6 +116,8 @@ const Api = {
                 id: satir.id,
                 sira: satir.sira,
                 kelime: satir.madde,
+                kok: satir.kok,
+                guncelleme_tarihi: satir.guncelleme_tarihi,
 
                 tur: {
                     id: satir.tur?.id ?? null,
@@ -111,8 +125,8 @@ const Api = {
                 },
 
                 bilesenler: bilesenler,
+                soz_obekleri: soz_obekleri, // Yeni eklenen veri alanı
 
-                // Kelime seviyesinde etiket tablosu DDL içinde bulunmuyor, boş dizi dönülüyor
                 etiketler: [],
 
                 telaffuz: {
@@ -133,10 +147,7 @@ const Api = {
         });
 
         return { aranan: word, maddeler };
-
     },
-
-
 
     async search(text) {
         if (!text || text.trim().length < 2)
@@ -148,6 +159,8 @@ const Api = {
                 id,
                 madde,
                 sira,
+                kok,
+                guncelleme_tarihi,
                 tur:turler (
                     id,
                     ad
@@ -167,11 +180,12 @@ const Api = {
             id: k.id,
             kelime: k.madde,
             sira: k.sira,
+            kok: k.kok,
+            guncelleme_tarihi: k.guncelleme_tarihi,
             tur: {
                 id: k.tur?.id ?? null,
                 ad: k.tur?.ad ?? ""
             }
         }));
     },
-
 };

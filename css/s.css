@@ -1,0 +1,335 @@
+:root {
+    --primary-red: #c8102e;
+    --dark-red: #900c21;
+    --border-color: #e0e0e0;
+    --line-color: #d0d5dd;
+    --text-dark: #2c3e50;
+    --text-muted: #6c757d;
+    --link-blue: #0056b3;
+    --bg-light: #f8f9fa;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #ffffff;
+    color: var(--text-dark);
+    line-height: 1.5;
+    font-family: "Noto Sans", sans-serif;
+    scroll-behavior: smooth; /* Yandaki kısayollara tıklayınca yumuşak kayma için */
+}
+
+/* Üst Bilgi Çubuğu (index.html ile birebir aynı) */
+.top-bar {
+    background-color: var(--primary-red);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 24px;
+    font-size: 14px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.brand-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: white; }
+.logo-letters { display: flex; gap: 2px; }
+.logo-box { background-color: white; color: var(--primary-red); font-weight: 800; font-size: 18px; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; border-radius: 2px; }
+.brand-title { font-family: "IBM Plex Sans", sans-serif; font-weight: 500; font-size: 15px; letter-spacing: 0.3px; }
+.top-nav { display: flex; gap: 10px; }
+.top-btn { background: rgba(255, 255, 255, 0.15); color: white; border: 1px solid rgba(255, 255, 255, 0.3); padding: 4px 12px; border-radius: 3px; font-size: 13px; cursor: pointer; text-decoration: none; transition: background 0.2s; }
+.top-btn:hover { background: rgba(255, 255, 255, 0.3); }
+
+.container { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
+
+/* Arama Alanı (index.html ile birebir aynı) */
+.search-section { margin: 25px 0 35px 0; max-width: 100%; display: flex; justify-content: center; }
+.search-box{
+    position:relative;
+    display:flex;
+    gap:0;
+    align-items:center;
+    width:100%;
+    max-width:820px;
+}
+.search-suggestions{
+    position:absolute;
+    left:0;
+    right:38px;
+    top:100%;
+    margin-top:2px;
+
+    background:#fff;
+
+    border:1px solid #dcdfe3;
+    border-top:none;
+
+    box-shadow:
+        0 6px 18px rgba(0,0,0,.08);
+
+    display:none;
+
+    z-index:500;
+}
+
+.search-suggestions.show{
+    display:block;
+}
+
+.search-item{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    padding:10px 14px;
+    cursor:pointer;
+    transition:background .15s;
+}
+
+.search-item:not(:last-child){
+    border-bottom:1px solid #ececec;
+}
+
+.search-item:hover,
+.search-item.active{
+    background:#f7f8fa;
+}
+
+.search-word{
+    font-weight:600;
+    color:#222;
+}
+
+.search-separator{
+    color:#9aa0a6;
+    user-select:none;
+}
+
+.search-type{
+    color:#6b7280;
+    font-size:14px;
+}
+
+.search-item.selected{
+    background:#f2f4f7;
+}
+
+.search-input { font-family: "Inter", sans-serif; flex: 1; padding: 9px 14px; font-size: 15px; border: 1px solid #ccc; border-radius: 0px; outline: none; height: 38px; }
+.search-input:focus { border-color: var(--primary-red); }
+.search-btn { background-color: var(--primary-red); border: none; width: 42px; height: 38px; border-radius: 0px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background-color 0.2s; }
+.search-btn:hover { background-color: var(--dark-red); }
+.help-btn { background-color: #f1f3f5; border: 1px solid #ccc; width: 38px; height: 38px; border-radius: 0px; cursor: pointer; display: flex; align-items: center; justify-content: center; border-left: none; }
+.help-btn:hover { background-color: #e9ecef; }
+
+.entry-selector{
+    margin-top:14px;
+    margin-bottom:22px;
+}
+
+.entry-selector.hidden{
+    display:none;
+}
+
+.entry-tabs{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+}
+
+.entry-tab{
+    background:#f5f5f5;
+    border:1px solid #d8d8d8;
+    color:#333;
+    padding:6px 14px;
+    border-radius:4px;
+    cursor:pointer;
+    transition:0.15s;
+    font-size:14px;
+}
+
+.entry-tab:hover{
+    background:#ececec;
+}
+
+.entry-tab.active{
+    background:var(--primary-red);
+    color:white;
+    border-color:var(--primary-red);
+}
+
+/* Sözlük Ana Düzeni (3 Sütunlu DWDS Mimarisi) */
+.dict-layout {
+    display: grid;
+    grid-template-columns: 200px 1fr 300px;
+    gap: 40px;
+    margin-bottom: 50px;
+    align-items: start;
+}
+
+/* Sol Panel: Gezinme (Kısayollar) */
+.left-sidebar {
+    position: sticky;
+    top: 60px; /* Üst çubuğun altında kalacak şekilde */
+}
+
+.page-nav { list-style: none; border-left: 2px solid var(--border-color); }
+.page-nav li a {
+    display: block;
+    padding: 8px 16px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.2s;
+    border-left: 2px solid transparent;
+    margin-left: -2px;
+}
+.page-nav li a:hover, .page-nav li a.active {
+    color: var(--primary-red);
+    border-left-color: var(--primary-red);
+    background-color: var(--bg-light);
+}
+
+/* Orta Panel: Madde İçeriği */
+.main-content {
+    min-width: 0; /* Uzun metinlerin taşmasını engeller */
+}
+
+
+
+.overview-item{
+    padding:18px 0;
+    border-bottom:1px solid var(--border-color);
+}
+
+.overview-type{
+    color:#666;
+    font-size:15px;
+}
+
+.overview-link{
+    font-size:1.55rem;
+    font-family:"Source Serif 4",serif;
+    font-weight:700;
+    color:var(--primary-red);
+    cursor:pointer;
+    text-decoration:none;
+}
+
+.overview-link:hover{
+    color: var(--dark-red);
+    text-decoration:underline;
+}
+
+.overview-type{
+    color:#666;
+    font-size:15px;
+}
+
+.overview-meanings{
+    margin-left:22px;
+}
+
+.overview-meanings li{
+    margin-bottom:4px;
+}
+
+.word-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 1px solid var(--line-color);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.word-title {
+    font-family: "Source Serif 4", serif;
+    font-size: 2.5rem;
+    color: #111;
+    font-weight: 700;
+}
+
+.update-date {
+    background: none;
+    color: rgb(88, 84, 84);
+    border: none;
+    padding: 1x 1px;
+    font-size: 12px;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+/* Dilbilgisi Tablosu */
+.grammar-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+.grammar-table td { padding: 4px 0; vertical-align: top; }
+.grammar-table td:first-child { color: var(--text-muted); width: 140px; font-style: italic; }
+
+/* Bölüm Başlıkları */
+.section-title {
+    font-size: 1.25rem;
+    color: #111;
+    margin: 30px 0 15px 0;
+    padding-bottom: 5px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Anlamlar Listesi */
+.meanings-list { list-style: none; counter-reset: meaning-counter; }
+.meanings-list > li { margin-bottom: 25px; position: relative; padding-left: 25px; }
+.meanings-list > li::before {
+    counter-increment: meaning-counter;
+    content: counter(meaning-counter) ".";
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-weight: bold;
+    color: var(--primary-red);
+}
+
+.meaning-def { font-weight: 500; font-size: 15px; margin-bottom: 8px; }
+
+.examples-list { list-style: none; padding-left: 15px; font-size: 14px; color: #444; }
+.examples-list li { margin-bottom: 4px; padding-left: 10px; border-left: 2px solid var(--border-color); }
+.examples-list .highlight { font-weight: bold; color: #111; }
+
+/* Sağ Panel: Görselleştirmeler ve İstatistikler */
+.right-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.widget { background: #fff; border: 1px solid var(--border-color); border-radius: 4px; padding: 15px; }
+.widget-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; font-size: 14px; font-weight: bold; color: #111; }
+.widget-header a { font-size: 11px; color: var(--link-blue); text-decoration: none; font-weight: normal; }
+
+/* Grafik Yer Tutucuları (SVG) */
+.chart-placeholder {
+    width: 100%;
+    height: 120px;
+    background: var(--bg-light);
+    border: 1px solid var(--line-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+/* Mobil Uyum */
+@media (max-width: 992px) {
+    .dict-layout { grid-template-columns: 1fr 280px; }
+    .left-sidebar { display: none; } /* Mobilde sol menüyü gizle veya alta al */
+}
+@media (max-width: 768px) {
+    .dict-layout { grid-template-columns: 1fr; }
+}

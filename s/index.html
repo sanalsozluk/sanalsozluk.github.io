@@ -5,343 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TDSS - Sözlük</title>
     <!-- Gerekli yazı tipleri (Ağ üzerinden çekildiğini varsayıyoruz, index.html'ye uyumlu) -->
-    <style>
-        :root {
-            --primary-red: #c8102e;
-            --dark-red: #900c21;
-            --border-color: #e0e0e0;
-            --line-color: #d0d5dd;
-            --text-dark: #2c3e50;
-            --text-muted: #6c757d;
-            --link-blue: #0056b3;
-            --bg-light: #f8f9fa;
-        }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            background-color: #ffffff;
-            color: var(--text-dark);
-            line-height: 1.5;
-            font-family: "Noto Sans", sans-serif;
-            scroll-behavior: smooth; /* Yandaki kısayollara tıklayınca yumuşak kayma için */
-        }
-
-        /* Üst Bilgi Çubuğu (index.html ile birebir aynı) */
-        .top-bar {
-            background-color: var(--primary-red);
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 6px 24px;
-            font-size: 14px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .brand-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: white; }
-        .logo-letters { display: flex; gap: 2px; }
-        .logo-box { background-color: white; color: var(--primary-red); font-weight: 800; font-size: 18px; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; border-radius: 2px; }
-        .brand-title { font-family: "IBM Plex Sans", sans-serif; font-weight: 500; font-size: 15px; letter-spacing: 0.3px; }
-        .top-nav { display: flex; gap: 10px; }
-        .top-btn { background: rgba(255, 255, 255, 0.15); color: white; border: 1px solid rgba(255, 255, 255, 0.3); padding: 4px 12px; border-radius: 3px; font-size: 13px; cursor: pointer; text-decoration: none; transition: background 0.2s; }
-        .top-btn:hover { background: rgba(255, 255, 255, 0.3); }
-
-        .container { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
-
-        /* Arama Alanı (index.html ile birebir aynı) */
-        .search-section { margin: 25px 0 35px 0; max-width: 100%; display: flex; justify-content: center; }
-        .search-box{
-            position:relative;
-            display:flex;
-            gap:0;
-            align-items:center;
-            width:100%;
-            max-width:820px;
-        }
-        .search-suggestions{
-            position:absolute;
-            left:0;
-            right:38px;
-            top:100%;
-            margin-top:2px;
-
-            background:#fff;
-
-            border:1px solid #dcdfe3;
-            border-top:none;
-
-            box-shadow:
-                0 6px 18px rgba(0,0,0,.08);
-
-            display:none;
-
-            z-index:500;
-        }
-
-        .search-suggestions.show{
-            display:block;
-        }
-
-        .search-item{
-            display:flex;
-            align-items:center;
-            gap:6px;
-            padding:10px 14px;
-            cursor:pointer;
-            transition:background .15s;
-        }
-
-        .search-item:not(:last-child){
-            border-bottom:1px solid #ececec;
-        }
-
-        .search-item:hover,
-        .search-item.active{
-            background:#f7f8fa;
-        }
-
-        .search-word{
-            font-weight:600;
-            color:#222;
-        }
-
-        .search-separator{
-            color:#9aa0a6;
-            user-select:none;
-        }
-
-        .search-type{
-            color:#6b7280;
-            font-size:14px;
-        }
-
-        .search-item.selected{
-            background:#f2f4f7;
-        }
-
-        .search-input { font-family: "Inter", sans-serif; flex: 1; padding: 9px 14px; font-size: 15px; border: 1px solid #ccc; border-radius: 0px; outline: none; height: 38px; }
-        .search-input:focus { border-color: var(--primary-red); }
-        .search-btn { background-color: var(--primary-red); border: none; width: 42px; height: 38px; border-radius: 0px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background-color 0.2s; }
-        .search-btn:hover { background-color: var(--dark-red); }
-        .help-btn { background-color: #f1f3f5; border: 1px solid #ccc; width: 38px; height: 38px; border-radius: 0px; cursor: pointer; display: flex; align-items: center; justify-content: center; border-left: none; }
-        .help-btn:hover { background-color: #e9ecef; }
-
-        .entry-selector{
-            margin-top:14px;
-            margin-bottom:22px;
-        }
-
-        .entry-selector.hidden{
-            display:none;
-        }
-
-        .entry-tabs{
-            display:flex;
-            flex-wrap:wrap;
-            gap:8px;
-        }
-
-        .entry-tab{
-            background:#f5f5f5;
-            border:1px solid #d8d8d8;
-            color:#333;
-            padding:6px 14px;
-            border-radius:4px;
-            cursor:pointer;
-            transition:0.15s;
-            font-size:14px;
-        }
-
-        .entry-tab:hover{
-            background:#ececec;
-        }
-
-        .entry-tab.active{
-            background:var(--primary-red);
-            color:white;
-            border-color:var(--primary-red);
-        }
-
-        /* Sözlük Ana Düzeni (3 Sütunlu DWDS Mimarisi) */
-        .dict-layout {
-            display: grid;
-            grid-template-columns: 200px 1fr 300px;
-            gap: 40px;
-            margin-bottom: 50px;
-            align-items: start;
-        }
-
-        /* Sol Panel: Gezinme (Kısayollar) */
-        .left-sidebar {
-            position: sticky;
-            top: 60px; /* Üst çubuğun altında kalacak şekilde */
-        }
-        
-        .page-nav { list-style: none; border-left: 2px solid var(--border-color); }
-        .page-nav li a {
-            display: block;
-            padding: 8px 16px;
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 14px;
-            transition: all 0.2s;
-            border-left: 2px solid transparent;
-            margin-left: -2px;
-        }
-        .page-nav li a:hover, .page-nav li a.active {
-            color: var(--primary-red);
-            border-left-color: var(--primary-red);
-            background-color: var(--bg-light);
-        }
-
-        /* Orta Panel: Madde İçeriği */
-        .main-content {
-            min-width: 0; /* Uzun metinlerin taşmasını engeller */
-        }
-
-        
-
-        .overview-item{
-            padding:18px 0;
-            border-bottom:1px solid var(--border-color);
-        }
-
-        .overview-type{
-            color:#666;
-            font-size:15px;
-        }
-
-        .overview-link{
-            font-size:1.55rem;
-            font-family:"Source Serif 4",serif;
-            font-weight:700;
-            color:var(--primary-red);
-            cursor:pointer;
-            text-decoration:none;
-        }
-
-        .overview-link:hover{
-            color: var(--dark-red);
-            text-decoration:underline;
-        }
-
-        .overview-type{
-            color:#666;
-            font-size:15px;
-        }
-
-        .overview-meanings{
-            margin-left:22px;
-        }
-
-        .overview-meanings li{
-            margin-bottom:4px;
-        }
-
-        .word-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            border-bottom: 1px solid var(--line-color);
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-        }
-        
-        .word-title {
-            font-family: "Source Serif 4", serif;
-            font-size: 2.5rem;
-            color: #111;
-            font-weight: 700;
-        }
-
-        .word-actions button {
-            background: var(--link-blue);
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 3px;
-            font-size: 12px;
-            cursor: pointer;
-            margin-left: 5px;
-        }
-
-        /* Dilbilgisi Tablosu */
-        .grammar-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 14px;
-            margin-bottom: 30px;
-        }
-        .grammar-table td { padding: 4px 0; vertical-align: top; }
-        .grammar-table td:first-child { color: var(--text-muted); width: 140px; font-style: italic; }
-
-        /* Bölüm Başlıkları */
-        .section-title {
-            font-size: 1.25rem;
-            color: #111;
-            margin: 30px 0 15px 0;
-            padding-bottom: 5px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        /* Anlamlar Listesi */
-        .meanings-list { list-style: none; counter-reset: meaning-counter; }
-        .meanings-list > li { margin-bottom: 25px; position: relative; padding-left: 25px; }
-        .meanings-list > li::before {
-            counter-increment: meaning-counter;
-            content: counter(meaning-counter) ".";
-            position: absolute;
-            left: 0;
-            top: 0;
-            font-weight: bold;
-            color: var(--primary-red);
-        }
-
-        .meaning-def { font-weight: 500; font-size: 15px; margin-bottom: 8px; }
-        
-        .examples-list { list-style: none; padding-left: 15px; font-size: 14px; color: #444; }
-        .examples-list li { margin-bottom: 4px; padding-left: 10px; border-left: 2px solid var(--border-color); }
-        .examples-list .highlight { font-weight: bold; color: #111; }
-
-        /* Sağ Panel: Görselleştirmeler ve İstatistikler */
-        .right-sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
-
-        .widget { background: #fff; border: 1px solid var(--border-color); border-radius: 4px; padding: 15px; }
-        .widget-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; font-size: 14px; font-weight: bold; color: #111; }
-        .widget-header a { font-size: 11px; color: var(--link-blue); text-decoration: none; font-weight: normal; }
-
-        /* Grafik Yer Tutucuları (SVG) */
-        .chart-placeholder {
-            width: 100%;
-            height: 120px;
-            background: var(--bg-light);
-            border: 1px solid var(--line-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-
-        /* Mobil Uyum */
-        @media (max-width: 992px) {
-            .dict-layout { grid-template-columns: 1fr 280px; }
-            .left-sidebar { display: none; } /* Mobilde sol menüyü gizle veya alta al */
-        }
-        @media (max-width: 768px) {
-            .dict-layout { grid-template-columns: 1fr; }
-        }
-    </style>
+    <link rel="stylesheet" href="/css/s.css">
 
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="/js/url.js"></script>
@@ -352,7 +17,7 @@
 
     <!-- Üst Bilgi Çubuğu -->
     <header class="top-bar">
-        <a href="#" class="brand-logo">
+        <a href="/" class="brand-logo">
             <div class="logo-letters">
                 <span class="logo-box">T</span>
                 <span class="logo-box">D</span>
@@ -425,6 +90,27 @@
 
                 </div>
 
+                <div id="not-found-page" class="not-found-card" style="display: none;">
+                    <div class="not-found-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#8c959f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            <line x1="8" y1="11" x2="14" y2="11"></line>
+                        </svg>
+                    </div>
+                    <h2 class="not-found-title" id="not-found-title">Sözcük Bulunamadı</h2>
+                    <p class="not-found-text">
+                        Aradığınız <strong id="not-found-word">""</strong> sözcüğü sözlüğümüzde yer almıyor.
+                    </p> <br>
+                    <div class="not-found-suggestions">
+                        <span>Öneriler:</span>
+                        <ul>
+                            <li>Sözcüğü doğru yazdığınızdan emin olun</li>
+                            <li>Eğer bu gerçek bir kelimeyse sözlüğe ekletmek için iletişime geçebilirsiniz</li>
+                        </ul>
+                    </div>
+                </div>
+
                 <div id="entry-page">
 
                     <!-- mevcut içerik -->
@@ -434,7 +120,7 @@
                     <div class="word-header" id="baslangic">
                         <!-- API'den doldurulacak başlık -->
                         <h1 class="word-title" data-api="word-title">Yükleniyor...</h1>
-                        <div class="word-actions">
+                        <div class="update-date">
                             <!--  Şimdilik boş ilerde belki bir şeyler gelir aklıma -->
                         </div>
                     </div>
@@ -459,7 +145,7 @@
             </main>
 
             <!-- Sağ Panel: İstatistikler ve Görseller -->
-            <aside class="right-sidebar">
+            <aside id="right-sidebar" class="right-sidebar">
                 
                 <div class="widget">
                     <div class="widget-header">
@@ -542,10 +228,6 @@
             });
         });
 
-        // 2. MODÜLER API SİMÜLASYONU
-        // Her şeyi API'den kolayca değiştirebilmen için kurulan modüler yapı.
-        // Bu veriyi Fetch API (ör. `fetch('https://api.tdss.com/word/akisim')`) ile sunucudan çektiğini varsay.
-        
         const apiDummyData = {
             aranan: "yüz",
 
@@ -745,6 +427,16 @@
             document.querySelector("[data-api='etymology-detailed']").textContent =
                 madde.koken.aciklama;
 
+            const tarih = new Date(madde.guncelleme_tarihi);
+
+            document.querySelector(".update-date").textContent =
+                "Son güncelleme: " +
+                tarih.toLocaleDateString("tr-TR", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric"
+            });
+
             renderAnlamlar(madde.anlamlar);
             guncelleSolMenu();
 
@@ -753,33 +445,39 @@
         function renderBilgiler(madde){
             const tbody=document.querySelector("[data-api='grammar-table']");
             tbody.innerHTML="";
+            
             satirEkle(
                 "Dil bilgisi",
                 madde.tur.ad +
                 (madde.etiketler.length
                     ? " (" + madde.etiketler.join(", ") + ")"
+                    : "") +
+                (madde.kok
+                    ? "    ·    kök: " + madde.kok
                     : "")
             );
+            
             satirEkle(
                 "Söyleniş",
                 madde.telaffuz.ipa ?? ""
             );
+            
             if(madde.tur.ad==="Söz Öbeği"){
-
                 satirEkleBaglantilar(
                     "Bileşenler",
                     madde.bilesenler
                 );
-            }else{
+            } else {
                 satirEkle(
-                    "Sözcük ayrımı",
+                    "Heceleniş",
                     madde.heceleme.join(" · ")
                 );
                 satirEkleBaglantilar(
                     "Söz öbekleri",
-                    madde.sozObekleri
+                    madde.soz_obekleri // Düzeltme burada uygulandı
                 );
             }
+            
             function satirEkle(baslik,icerik){
                 const tr=document.createElement("tr");
                 tr.innerHTML=`
@@ -788,11 +486,13 @@
                 `;
                 tbody.appendChild(tr);
             }
+            
             function satirEkleBaglantilar(baslik,liste){
                 const tr=document.createElement("tr");
                 const td1=document.createElement("td");
                 td1.textContent=baslik;
                 const td2=document.createElement("td");
+                
                 if(liste && liste.length){
                     liste.forEach((oge,index)=>{
                         const a=document.createElement("a");
@@ -803,7 +503,7 @@
                             td2.append(", ");
                         }
                     });
-                }else{
+                } else {
                     td2.textContent="";
                 }
                 tr.append(td1,td2);
@@ -859,22 +559,21 @@
             const input = document.getElementById("search-input");
             input.focus();
             input.setSelectionRange(input.value.length, input.value.length);
-            loadFromUrl();
+            //loadFromUrl();
         });
 
         // Arama simülasyonu
         async function searchWord(){
-
-            const kelime=input.value.trim();
-
+            const kelime = input.value.trim();
             if(!kelime) return;
 
             suggestionBox.classList.remove("show");
 
-            const veri=await Api.getWord(kelime);
+            // Adres çubuğunu güncelle
+            history.pushState({}, "", "/s/" + encodeURIComponent(kelime));
 
-            olusturSekmeler(veri);
-
+            // Api'yi doğrudan çekmek ve sekmeleri oluşturmak yerine ana denetleyici işlevi çağır
+            kelimeVerisiniGetir(kelime);
         }
 
         const ustSimge=["⁰","¹","²","³","⁴","⁵","⁶","⁷","⁸","⁹"];
@@ -1108,16 +807,14 @@
                 `;
 
                 div.onclick = async () => {
-
                     input.value = madde.kelime;
-
                     suggestionBox.classList.remove("show");
 
-                    const veri = await Api.getWord(madde.kelime);
-                    history.pushState({}, "", "/s/"+encodeURIComponent(madde.kelime));
+                    // Adres çubuğunu güncelle
+                    history.pushState({}, "", "/s/" + encodeURIComponent(madde.kelime));
 
-                    olusturSekmeler(veri);
-
+                    // Yine doğrudan denetleyici işlevi çağır
+                    kelimeVerisiniGetir(madde.kelime);
                 };
 
                 suggestionBox.appendChild(div);

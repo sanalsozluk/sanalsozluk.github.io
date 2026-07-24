@@ -28,30 +28,48 @@ function loadFromUrl() {
 async function kelimeVerisiniGetir(kelime) {
     const veri = await Api.getWord(kelime);
 
+    const entrySelector = document.getElementById("entry-selector");
+    const overviewPage = document.getElementById("overview-page");
+    const entryPage = document.getElementById("entry-page");
+    const notFoundPage = document.getElementById("not-found-page");
+    const scrollSpyNav = document.getElementById("scroll-spy-nav");
+    const rightSidebar = document.getElementById("right-sidebar");
+
+    // KELİME BULUNAMADI DURUMU
     if (!veri || !veri.maddeler || veri.maddeler.length === 0) {
-        // Kelime veritabanında bulunamadığında arayüzü temizleme (Veri sızıntısını önleme)
-        document.getElementById("entry-selector").classList.add("hidden");
-        document.getElementById("overview-page").style.display = "none";
-        document.getElementById("scroll-spy-nav").style.display = "none";
+        // İlgisiz tüm panelleri gizle
+        if (entrySelector) entrySelector.classList.add("hidden");
+        if (overviewPage) overviewPage.style.display = "none";
+        if (entryPage) entryPage.style.display = "none";
+        if (scrollSpyNav) scrollSpyNav.style.display = "none";
+        if (rightSidebar) rightSidebar.style.display = "none";
+
+        // Bulunamadı kartındaki metni dinamik doldur ve görünür yap
+        const notFoundWordEl = document.getElementById("not-found-word");
+        if (notFoundWordEl) notFoundWordEl.textContent = `"${kelime}"`;
+        if (notFoundPage) notFoundPage.style.display = "block";
         
-        document.getElementById("entry-page").style.display = "";
-        
-        // Başlığı bulunamadı olarak güncelle
-        document.querySelector("[data-api='word-title']").textContent = `"${kelime}" bulunamadı`;
-        
-        // Önceki kelimeden kalan bilgi kırıntılarını temizle
-        document.querySelector("[data-api='grammar-info']").textContent = "";
-        document.querySelector("[data-api='pronunciation']").textContent = "";
-        document.querySelector("[data-api='syllables']").textContent = "";
-        document.querySelector("[data-api='etymology-short']").textContent = "";
-        document.querySelector("[data-api='etymology-detailed']").textContent = "";
-        document.getElementById("meanings-container").innerHTML = "";
-        
-        return;
+        return; // İşlev burada sonlanır, aşağıdaki kodlar çalışmaz.
     }
 
+    // KELİME BULUNDU DURUMU
+    
+    // 1. Önce hata ekranını gizle
+    if (notFoundPage) notFoundPage.style.display = "none";
+
+    // 2. Gizlediğin tüm yapıları css varsayılanlarına döndür (sıfırla)
+    // style.display içine "" (boş metin) atamak, satır içi stili siler ve css dosyasındaki kuralların geçerli olmasını sağlar.
+    if (rightSidebar) rightSidebar.style.display = "";
+    if (scrollSpyNav) scrollSpyNav.style.display = "";
+    if (overviewPage) overviewPage.style.display = "";
+    if (entryPage) entryPage.style.display = "";
+    
+    // 3. Sekme seçiciye eklediğin gizleme sınıfını kaldır
+    if (entrySelector) entrySelector.classList.remove("hidden");
+
+    // 4. Verileri arayüze bas
     olusturSekmeler(veri);
 }
 
-// window.onload atamasını ezip geçmek yerine standart olay dinleyicisi kullanıldı
+// window.onload atamasını geçmek yerine standart olay dinleyicisi kullanıldı
 window.addEventListener("load", loadFromUrl);
