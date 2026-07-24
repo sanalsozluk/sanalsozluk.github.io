@@ -32,18 +32,62 @@
     <!-- Üst Bilgi Çubuğu -->
     <header class="top-bar">
         <a href="/" class="brand-logo">
-            <div class="logo-letters">
-                <span class="logo-box">T</span>
-                <span class="logo-box">D</span>
-                <span class="logo-box">S</span>
-                <span class="logo-box">S</span>
+            <div class="brand-symbol">
+                <svg viewBox="0 0 64 64" aria-hidden="true">
+                    <!-- Dış çerçeve -->
+                    <circle
+                        cx="32"
+                        cy="32"
+                        r="28"
+                        fill="rgba(255,255,255,.08)"
+                        stroke="#f0d49b"
+                        stroke-width="1.6"/>
+                    <!-- Açık kitap -->
+                    <path
+                        d="
+                        M16 21
+                        Q24 18 32 24
+                        Q40 18 48 21
+                        V44
+                        Q40 41 32 47
+                        Q24 41 16 44
+                        Z"
+                        fill="white"
+                        opacity=".99"/>
+                    <!-- Sayfa çizgisi -->
+                    <path
+                        d="M32 24 V47"
+                        stroke="#d9b76f"
+                        stroke-width="1.2"/>
+                    <!-- Hilal -->
+                    <circle
+                        cx="32"
+                        cy="32"
+                        r="7"
+                        fill="#b78d42"/>
+
+                    <circle
+                        cx="34.5"
+                        cy="32"
+                        r="5.5"
+                        fill="white"
+                        opacity=".99"/>
+                </svg>
             </div>
-            <span class="brand-title">Türk Dili Sanal Sözlüğü</span>
+            <div class="brand-text">
+                <span class="brand-title">
+                    Türk Dili Sanal Sözlüğü
+                </span>
+                <span class="brand-subtitle">
+                    Türkçenin Dijital Hafızası
+                </span>
+            </div>
         </a>
-        <div class="top-nav">
-            <a href="#" class="top-btn">Uygulama</a>
-            <a href="#" class="top-btn">Oturum Aç</a>
-        </div>
+        <nav class="top-nav">
+            <a href="#" class="top-link">
+                Erişilebilirlik
+            </a>
+        </nav>
     </header>
 
     <div class="container">
@@ -60,13 +104,46 @@
                     </svg>
                 </button>
                 <!-- Yardım Düğmesi (SVG Resim) -->
-                <button class="help-btn" aria-label="Yardım">
+                <a href="/yardim/arama/" class="help-btn" aria-label="Yardım">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#495057" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="10"></circle>
                         <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
                         <line x1="12" y1="17" x2="12.01" y2="17"></line>
                     </svg>
-                </button>
+                </a>
+                <!-- Rastgele Madde Düğmesi (SVG Resim) -->
+                <a href="/s/" class="random-btn" aria-label="Rastgele Madde">
+                    <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#495057"
+                        stroke-width="2.3"
+                        stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <!-- Kitap -->
+                        <path d="
+                            M5 5
+                            Q8 4 12 6
+                            Q16 4 19 5
+                            V18
+                            Q16 17 12 19
+                            Q8 17 5 18
+                            Z"/>
+                        <!-- Sayfa çizgisi -->
+                        <path d="M12 6V19"/>
+                        <!-- Rastgele oku -->
+                        <path d="
+                            M8 10
+                            C9 8.8 10.8 8.8 12 10
+                            C13.3 11.2 14.7 12.8 16.4 12.8"/>
+                        <path d="
+                            M14.8 10.9
+                            L16.8 12.8
+                            L14.8 14.7"/>
+                    </svg>
+                </a>
                 <div id="search-suggestions" class="search-suggestions"></div>
             </div>
         </section>
@@ -96,9 +173,9 @@
                         </svg>
                     </div>
                     <ul class="card-links">
-                        <li><a href="/s/">TDSS Sözlüğü</a> | <a href="#">Terimler Sözlüğü</a></li>
-                        <li><a href="#">Tarihsel Sözlükler</a> | <a href="#">Terim Sözlükleri</a></li>
-                        <li><a href="#">Daha fazlası...</a></li>
+                        <li><a href="/s/">TDSS Sözlüğü</a> | <a>Terimler Sözlüğü</a></li>
+                        <li><a>Tarihsel Sözlükler</a> | <a>Terim Sözlükleri</a></li>
+                        <li><a>Daha fazlası...</a></li>
                     </ul>
                 </div>
 
@@ -125,9 +202,9 @@
                         </svg>
                     </div>
                     <ul class="card-links">
-                        <li><a href="#">TDSS Ana Derlemi</a> | <a href="#">Gazete Derlemi</a></li>
-                        <li><a href="#">Edebi Metinler Derlemi</a> | <a href="#">Yasa Metinleri</a></li>
-                        <li><a href="#">Daha fazlası...</a></li>
+                        <li><a>TDSS Ana Derlemi</a> | <a>Gazete Derlemi</a></li>
+                        <li><a>Edebi Metinler Derlemi</a> | <a>Yasa Metinleri</a></li>
+                        <li><a>Daha fazlası...</a></li>
                     </ul>
                 </div>
 
@@ -283,6 +360,23 @@
                     </p>
                 </section>
 
+                <!-- En Yeni Maddeler -->
+                <section class="sidebar-section">
+                    <div class="sidebar-header">
+                        <span class="sidebar-title">En Yeni Maddeler</span>
+                        <a href="#" class="sidebar-archive">[Rastgele Madde]</a>
+                    </div>
+                    <ul class="recent-words-list">
+                        <li><a href="#" class="news-link">özümsemek</a> <span class="news-date">[21.07.2026]</span></li>
+                        <li><a href="#" class="news-link">örüt</a> <span class="news-date">[19.07.2026]</span></li>
+                        <li><a href="#" class="news-link">çözümseme</a> <span class="news-date">[18.07.2026]</span></li>
+                        <li><a href="#" class="news-link">sanal</a> <span class="news-date">[12.07.2026]</span></li>
+                    </ul>
+                    <div style="text-align:right; margin-top:8px;">
+                        <a href="#" class="sidebar-archive">[tüm maddeler ...]</a>
+                    </div>
+                </section>
+
                 <!-- Duyurular -->
                 <section class="sidebar-section">
                     <div class="sidebar-header">
@@ -299,61 +393,52 @@
 
                     <div class="news-item">
                         <span class="news-date">[15.06.2026]</span>
-                        <a href="#" class="news-link">Derlem veritabanında sunucu bakımı tamamlandı.</a>
-                    </div>
-                </section>
-
-                <!-- En Yeni Maddeler -->
-                <section class="sidebar-section">
-                    <div class="sidebar-header">
-                        <span class="sidebar-title">En Yeni Maddeler</span>
-                        <a href="#" class="sidebar-archive">Rastgele Madde</a>
-                    </div>
-                    <ul class="recent-words-list">
-                        <li><a href="#" class="news-link">özümsemek</a> <span class="news-date">[21.07.2026]</span></li>
-                        <li><a href="#" class="news-link">örüt</a> <span class="news-date">[19.07.2026]</span></li>
-                        <li><a href="#" class="news-link">çözümseme</a> <span class="news-date">[18.07.2026]</span></li>
-                        <li><a href="#" class="news-link">sanal</a> <span class="news-date">[12.07.2026]</span></li>
-                    </ul>
-                    <div style="text-align:right; margin-top:8px;">
-                        <a href="#" class="sidebar-archive">[tüm maddeler ...]</a>
+                        <p style="font-size:11px; color:#666;">
+                            Yeni eklenen harita katmanları ile coğrafi veri dağılımları doğrudan incelenebilir.
+                        </p>
                     </div>
 
                     <!-- Sosyal Medya -->
                     <div class="social-icons">
-                        <a href="#" class="social-icon">t</a>
-                        <a href="#" class="social-icon">m</a>
-                        <a href="#" class="social-icon">g</a>
+                        <a class="social-icon">t</a>
+                        <a class="social-icon">m</a>
+                        <a class="social-icon">g</a>
                     </div>
                 </section>
+
+                
 
             </aside>
 
         </div>
     </div>
 
-    <!-- Alt Bilgi (Footer) -->
-    <footer>
+    <!-- Alt Bilgi -->
+    <footer class="footer">
+        <div class="footer-pattern"></div>
         <div class="container">
-            <div class="footer-top">
-                <div class="footer-brand">
-                    TDSS - Türk Dili Sanal Sözlüğü
-                </div>
-                <div class="footer-apps">
-                    <a href="#" class="app-badge">Google Play</a>
-                    <a href="#" class="app-badge">App Store</a>
+            <div class="footer-header">
+                <div class="footer-logo">
+                    <div class="footer-title">
+                        Türk Dili Sanal Sözlüğü
+                    </div>
+                    <div class="footer-subtitle">
+                        TÜRKÇENİN DİJİTAL HAFIZASI
+                    </div>
                 </div>
             </div>
-            
             <ul class="footer-links">
-                <li><a href="#">Hakkımızda</a></li>
+                <li><a href="/hakkimizda/">Hakkımızda</a></li>
                 <li><a href="#">Belgelemeler</a></li>
                 <li><a href="#">Ağ Güncesi</a></li>
                 <li><a href="#">Gizlilik Sözleşmesi</a></li>
                 <li><a href="#">Kullanım Koşulları</a></li>
-                <li><a href="#">İletişim ve Geri Bildirim</a></li>
+                <li><a href="#">İletişim</a></li>
                 <li><a href="#">Künye</a></li>
             </ul>
+            <div class="footer-bottom">
+                © 2026 TDSS • Türk Dili Sanal Sözlüğü
+            </div>
         </div>
     </footer>
 
@@ -496,15 +581,20 @@
             }
 
             else if(e.key==="Tab"){
-
-                if(selectedIndex>=0){
-
+                if(selectedIndex >= 0) {
                     e.preventDefault();
-
-                    input.value=liste[selectedIndex].kelime;
-
-                    goSearch();
-
+                    
+                    // Tıklama olayını tetiklemeden sadece kelimeyi input kutusuna yaz
+                    const secilenKelime = items[selectedIndex].querySelector(".search-word").textContent;
+                    input.value = secilenKelime;
+                    
+                    // Öneriler kutusunu kapat ve seçimi sıfırla
+                    suggestionBox.classList.remove("show");
+                    selectedIndex = -1;
+                    
+                    // İmleci inputun sonuna taşı
+                    input.focus();
+                    input.setSelectionRange(input.value.length, input.value.length);
                 }
             }
 

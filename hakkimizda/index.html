@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hakkımızda - TDSS</title>
+
+    <link rel="stylesheet" href="/css/anasayfa.css">
+
+    <style>
+        /* ---- Hakkımızda sayfasına özel stiller (anasayfa.css token'larını kullanır) ---- */
+
+        .about-hero {
+            display: grid;
+            grid-template-columns: 1.3fr 1fr;
+            gap: 40px;
+            align-items: center;
+            padding: 38px 0 44px 0;
+            border-bottom: 1px solid var(--line-color);
+            margin-bottom: 40px;
+        }
+
+        .about-eyebrow {
+            font-family: "IBM Plex Mono", monospace;
+            font-size: 12px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--primary-red);
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .about-hero h1 {
+            font-family: "Source Serif 4", serif;
+            font-size: 34px;
+            line-height: 1.25;
+            color: #1a1a1a;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+
+        .about-hero p {
+            font-size: 14.5px;
+            color: var(--text-muted);
+            max-width: 480px;
+        }
+
+        .about-hero-figure {
+            border: 1px solid var(--border-color);
+            border-radius: 3px;
+            overflow: hidden;
+            background: #f8f9fa;
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            border-bottom: 1px solid var(--line-color);
+            padding-bottom: 6px;
+            margin-bottom: 22px;
+        }
+
+        .section-heading h2 {
+            font-size: 19px;
+            font-weight: 700;
+            color: var(--primary-red);
+        }
+
+        .section-heading span {
+            font-family: "IBM Plex Mono", monospace;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .about-section {
+            margin-bottom: 46px;
+        }
+
+        /* Sayılar şeridi */
+        .stat-strip {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0;
+            border: 1px solid var(--border-color);
+            margin-bottom: 46px;
+        }
+
+        .stat-cell {
+            padding: 22px 18px;
+            text-align: center;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .stat-cell:last-child {
+            border-right: none;
+        }
+
+        .stat-num {
+            font-family: "IBM Plex Sans", sans-serif;
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--primary-red);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* Misyon / İlkeler kartları — anasayfa .card ile aynı dil */
+        .principle-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .principle-card {
+            border-top: 3px solid var(--primary-red);
+            background: #fff;
+            padding: 18px 16px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+        }
+
+        .principle-card h3 {
+            font-size: 15px;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+        }
+
+        .principle-card p {
+            font-size: 12.5px;
+            color: var(--text-muted);
+        }
+
+        /* Tarihçe / zaman çizgisi */
+        .timeline {
+            position: relative;
+            padding-left: 26px;
+        }
+
+        .timeline::before {
+            content: "";
+            position: absolute;
+            left: 5px;
+            top: 4px;
+            bottom: 4px;
+            width: 2px;
+            background: var(--line-color);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 26px;
+        }
+
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+
+        .timeline-item::before {
+            content: "";
+            position: absolute;
+            left: -26px;
+            top: 4px;
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            background: var(--primary-red);
+            border: 2px solid #fff;
+            box-shadow: 0 0 0 1px var(--primary-red);
+        }
+
+        .timeline-year {
+            font-family: "IBM Plex Mono", monospace;
+            font-size: 12px;
+            color: var(--primary-red);
+            font-weight: 700;
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        .timeline-item h4 {
+            font-size: 14.5px;
+            margin-bottom: 4px;
+            color: #1a1a1a;
+        }
+
+        .timeline-item p {
+            font-size: 12.5px;
+            color: var(--text-muted);
+            max-width: 640px;
+        }
+
+        /* Ekip / kurul */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .team-card {
+            text-align: center;
+        }
+
+        .team-avatar {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 3px;
+            background: #eef0f2;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            color: var(--primary-red);
+            font-family: "Source Serif 4", serif;
+            font-size: 26px;
+            font-weight: 700;
+        }
+
+        .team-card h4 {
+            font-size: 13.5px;
+            margin-bottom: 2px;
+            color: #1a1a1a;
+        }
+
+        .team-card span {
+            font-size: 11.5px;
+            color: var(--text-muted);
+        }
+
+        /* İletişim şeridi */
+        .contact-strip {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            border: 1px solid var(--border-color);
+        }
+
+        .contact-cell {
+            padding: 20px;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .contact-cell:last-child {
+            border-right: none;
+        }
+
+        .contact-cell h4 {
+            font-size: 13px;
+            color: var(--primary-red);
+            margin-bottom: 6px;
+        }
+
+        .contact-cell p, .contact-cell a {
+            font-size: 12.5px;
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+
+        .contact-cell a {
+            color: var(--link-blue);
+        }
+
+        @media (max-width: 992px) {
+            .about-hero { grid-template-columns: 1fr; }
+            .stat-strip { grid-template-columns: repeat(2, 1fr); }
+            .stat-cell:nth-child(2) { border-right: none; }
+            .principle-grid { grid-template-columns: 1fr; }
+            .team-grid { grid-template-columns: repeat(2, 1fr); }
+            .contact-strip { grid-template-columns: 1fr; }
+            .contact-cell { border-right: none; border-bottom: 1px solid var(--border-color); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Üst Bilgi Çubuğu -->
+    <header class="top-bar">
+        <a href="/" class="brand-logo">
+            <div class="brand-symbol">
+                <svg viewBox="0 0 64 64" aria-hidden="true">
+                    <!-- Dış çerçeve -->
+                    <circle
+                        cx="32"
+                        cy="32"
+                        r="28"
+                        fill="rgba(255,255,255,.08)"
+                        stroke="#f0d49b"
+                        stroke-width="1.6"/>
+                    <!-- Açık kitap -->
+                    <path
+                        d="
+                        M16 21
+                        Q24 18 32 24
+                        Q40 18 48 21
+                        V44
+                        Q40 41 32 47
+                        Q24 41 16 44
+                        Z"
+                        fill="white"
+                        opacity=".99"/>
+                    <!-- Sayfa çizgisi -->
+                    <path
+                        d="M32 24 V47"
+                        stroke="#d9b76f"
+                        stroke-width="1.2"/>
+                    <!-- Hilal -->
+                    <circle
+                        cx="32"
+                        cy="32"
+                        r="7"
+                        fill="#b78d42"/>
+
+                    <circle
+                        cx="34.5"
+                        cy="32"
+                        r="5.5"
+                        fill="white"
+                        opacity=".99"/>
+                </svg>
+            </div>
+            <div class="brand-text">
+                <span class="brand-title">
+                    Türk Dili Sanal Sözlüğü
+                </span>
+                <span class="brand-subtitle">
+                    Türkçenin Dijital Hafızası
+                </span>
+            </div>
+        </a>
+        <nav class="top-nav">
+            <a href="#" class="top-link">
+                Erişilebilirlik
+            </a>
+        </nav>
+    </header>
+
+    <div class="container">
+
+        <!-- Hero -->
+        <section class="about-hero">
+            <div>
+                <span class="about-eyebrow">Hakkımızda</span>
+                <h1>Türkçenin sözcük dağarcığını herkes için açık, doğrulanabilir ve güncel tutuyoruz.</h1>
+                <p>
+                    TDSS, tarihsel ve çağdaş Türkçe metinlerden derlenen veriye dayalı bir
+                    sözlük ve derlem platformudur.
+                </p>
+            </div>
+            <div class="about-hero-figure">
+                <svg width="100%" height="220" viewBox="0 0 420 220" preserveAspectRatio="none">
+                    <rect width="420" height="220" fill="#f8f9fa"/>
+                    <rect x="30" y="30" width="360" height="160" fill="#ffffff" stroke="#d1d5db" stroke-width="1"/>
+                    <rect x="50" y="55" width="140" height="10" fill="#c8102e"/>
+                    <rect x="50" y="80" width="220" height="5" fill="#9ca3af"/>
+                    <rect x="50" y="94" width="190" height="5" fill="#d1d5db"/>
+                    <rect x="50" y="108" width="210" height="5" fill="#d1d5db"/>
+                    <circle cx="320" cy="140" r="34" fill="none" stroke="#c8102e" stroke-width="2"/>
+                    <line x1="345" y1="165" x2="365" y2="185" stroke="#c8102e" stroke-width="2"/>
+                </svg>
+            </div>
+        </section>
+
+        <!-- Sayılar -->
+        <div class="stat-strip">
+            <div class="stat-cell">
+                <span class="stat-num">8</span>
+                <span class="stat-label">sözlük maddesi</span>
+            </div>
+            <div class="stat-cell">
+                <span class="stat-num">0</span>
+                <span class="stat-label">derlem belgesi</span>
+            </div>
+            <div class="stat-cell">
+                <span class="stat-num">1</span>
+                <span class="stat-label">sözlük</span>
+            </div>
+            <div class="stat-cell">
+                <span class="stat-num">2026</span>
+                <span class="stat-label">kuruluş yılı</span>
+            </div>
+        </div>
+
+        <!-- Misyon / İlkeler -->
+        <section class="about-section">
+            <div class="section-heading">
+                <h2>Ne Yapıyoruz</h2>
+                <span>/ amaç ve ilkeler</span>
+            </div>
+            <div class="principle-grid">
+                <div class="principle-card">
+                    <h3>Veriye dayalı sözlükçülük</h3>
+                    <p>
+                        Her madde, gerçek kullanım örnekleriyle desteklenir; tanımlar keyfi değil,
+                        derlemlerden çıkarılan somut kanıtlara dayanır.
+                    </p>
+                </div>
+                <div class="principle-card">
+                    <h3>Açık erişim</h3>
+                    <p>
+                        Sözlük ve derlem verilerinin büyük kısmı araştırmacılar, öğretmenler ve
+                        geliştiriciler için ücretsiz ve indirilebilir biçimde sunulur.
+                    </p>
+                </div>
+                <div class="principle-card">
+                    <h3>Bilgi yoğunluğu</h3>
+                    <p>
+                        Sözlüklerde olabildiğince fazla bilgi göstermeye çalışıyoruz.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tarihçe -->
+        <section class="about-section">
+            <div class="section-heading">
+                <h2>Tarihçemiz</h2>
+                <span>/ önemli dönüm noktaları</span>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <span class="timeline-year">2026, Temmuz</span>
+                    <h4>Proje başlangıcı</h4>
+                    <p>Küçük bir akademik ekip, dağınık sözlük kaynaklarını tek bir çatı altında toplama fikriyle çalışmalara başladı.</p>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-year">Hedef: 2026, Eylül</span>
+                    <h4>İlk kamu sürümü</h4>
+                    <p>TDSS Sözlüğü'nün ilk sürümü, 54 maddeyle Dil Bayramı'nda kamuya açılacak.</p>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-year">Hedef: 2027, Şubat</span>
+                    <h4>Sayımlamalar ve canlı arama</h4>
+                    <p>Sözcüklerin coğrafi ve zamansal dağılımını gösteren araçlar ile canlı arama özelliği eklenecek.</p>
+                    <p>Madde sayısı 200'e ulaşacak.</p>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-year">Hedef: 2027, Haziran</span>
+                    <h4>Derlem altyapısının kurulması</h4> 
+                    <p>Tarihsel ve çağdaş metinlerden oluşan büyük ölçekli derlem sistemi devreye alınacak.</p>
+                    <p>Madde sayısı 1000'i aşacak.</p>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-year">Hedef: 2032</span>
+                    <h4>En kapsamlı Türkçe Sözlüğü TDSS olacak.</h4>
+                    <p>Madde sayısı 800.000'den daha fazla olacak.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ekip -->
+        <section class="about-section">
+            <div class="section-heading">
+                <h2>Ekibimiz</h2>
+                <span>/ yürütme kurulu</span>
+            </div>
+            <div class="team-grid">
+                <div class="team-card">
+                    <div class="team-avatar">1 kişi</div>
+                    <h4>Tasarı Yürütücüsü</h4>
+                    <span>Her şeyi yapan kişi</span>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar">0 kişi</div>
+                    <h4>Baş Sözlükbilimci</h4>
+                    <span>Dilbilimciler</span>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar">0 kişi</div>
+                    <h4>Derlem Sorumlusu</h4>
+                    <span>Dilbilimciler</span>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar">0 kişi</div>
+                    <h4>Yazılım Sorumlusu</h4>
+                    <span>Geliştiriciler</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- İletişim -->
+        <section class="about-section">
+            <div class="section-heading">
+                <h2>İletişim</h2>
+                <span>/ şimdilik bize ulaşamazsınız</span>
+            </div>
+            <div class="contact-strip">
+                <div class="contact-cell">
+                    <h4>Genel Sorular</h4>
+                    <p>Öneri, katkı ve iş birliği talepleri için:</p>
+                    <a>Henüz iletişim ağımız bulunmamaktadır.</a>
+                </div>
+                <div class="contact-cell">
+                    <h4>Basın</h4>
+                    <p>Basın ve medya talepleri için:</p>
+                    <a>Henüz iletişim ağımız bulunmamaktadır.</a>
+                </div>
+                <div class="contact-cell">
+                    <h4>Katkı ve Gönüllülük</h4>
+                    <p>Derleme ve madde katkısı için:</p>
+                    <a>Henüz iletişim ağımız bulunmamaktadır.</a>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Alt Bilgi -->
+    <footer class="footer">
+        <div class="footer-pattern"></div>
+        <div class="container">
+            <div class="footer-header">
+                <div class="footer-logo">
+                    <div class="footer-title">
+                        Türk Dili Sanal Sözlüğü
+                    </div>
+                    <div class="footer-subtitle">
+                        TÜRKÇENİN DİJİTAL HAFIZASI
+                    </div>
+                </div>
+            </div>
+            <ul class="footer-links">
+                <li><a href="/hakkimizda/">Hakkımızda</a></li>
+                <li><a href="#">Belgelemeler</a></li>
+                <li><a href="#">Ağ Güncesi</a></li>
+                <li><a href="#">Gizlilik Sözleşmesi</a></li>
+                <li><a href="#">Kullanım Koşulları</a></li>
+                <li><a href="#">İletişim</a></li>
+                <li><a href="#">Künye</a></li>
+            </ul>
+            <div class="footer-bottom">
+                © 2026 TDSS • Türk Dili Sanal Sözlüğü
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

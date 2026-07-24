@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arama Yardımı - TDSS</title>
+
+    <link rel="stylesheet" href="/css/anasayfa.css">
+
+    <style>
+        /* ---- Arama Yardımı sayfasına özel stiller (anasayfa.css token'larını kullanır) ---- */
+
+        .help-layout {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            gap: 40px;
+            margin: 30px 0 50px 0;
+        }
+
+        /* Sol: içindekiler */
+        .help-toc {
+            position: sticky;
+            top: 20px;
+            align-self: start;
+            border-right: 1px solid var(--line-color);
+            padding-right: 20px;
+        }
+
+        .help-toc-title {
+            font-family: "IBM Plex Mono", monospace;
+            font-size: 11px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .help-toc ul {
+            list-style: none;
+        }
+
+        .help-toc li {
+            margin-bottom: 9px;
+        }
+
+        .help-toc a {
+            font-size: 13px;
+            color: var(--text-dark);
+            text-decoration: none;
+        }
+
+        .help-toc a:hover {
+            color: var(--primary-red);
+        }
+
+        /* Sol Panel: Gezinme (Kısayollar) */
+        .left-sidebar {
+            position: sticky;
+            top: 20px;
+            align-self: start;
+        }
+
+        .page-nav { list-style: none; border-left: 2px solid var(--border-color); }
+        .page-nav li a {
+            display: block;
+            padding: 8px 16px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.2s;
+            border-left: 2px solid transparent;
+            margin-left: -2px;
+        }
+        .page-nav li a:hover, .page-nav li a.active {
+            color: var(--primary-red);
+            border-left-color: var(--primary-red);
+            background-color: var(--bg-light);
+        }
+
+        /* Sağ: içerik */
+        .help-intro {
+            margin-bottom: 36px;
+        }
+
+        .help-eyebrow {
+            font-family: "IBM Plex Mono", monospace;
+            font-size: 12px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--primary-red);
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .help-intro h1 {
+            font-family: "Source Serif 4", serif;
+            font-size: 30px;
+            color: #1a1a1a;
+            margin-bottom: 14px;
+            font-weight: 700;
+        }
+
+        .help-intro p {
+            font-size: 14.5px;
+            color: var(--text-muted);
+            max-width: 640px;
+        }
+
+        .help-section {
+            margin-bottom: 42px;
+            scroll-margin-top: 20px;
+        }
+
+        .help-section .section-heading {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            border-bottom: 1px solid var(--line-color);
+            padding-bottom: 6px;
+            margin-bottom: 18px;
+        }
+
+        .help-section .section-heading h2 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary-red);
+        }
+
+        .help-section .section-heading span {
+            font-family: "IBM Plex Mono", monospace;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .help-section > p {
+            font-size: 13.5px;
+            color: #333;
+            margin-bottom: 14px;
+            max-width: 720px;
+        }
+
+        /* Örnek arama kutusu görseli */
+        .demo-search {
+            display: flex;
+            max-width: 420px;
+            margin-bottom: 16px;
+        }
+
+        .demo-input {
+            font-family: "Inter", sans-serif;
+            flex: 1;
+            padding: 8px 12px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-right: none;
+            height: 34px;
+        }
+
+        .demo-btn {
+            background-color: var(--primary-red);
+            border: none;
+            width: 38px;
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* İşleç tablosu */
+        .op-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .op-table th {
+            text-align: left;
+            font-size: 11.5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--line-color);
+            padding: 8px 10px;
+        }
+
+        .op-table td {
+            padding: 10px;
+            border-bottom: 1px solid #f0f1f3;
+            vertical-align: top;
+        }
+
+        .op-code {
+            font-family: "IBM Plex Mono", monospace;
+            background: #f8f9fa;
+            border: 1px solid var(--border-color);
+            border-radius: 3px;
+            padding: 2px 6px;
+            font-size: 12.5px;
+            color: var(--primary-red);
+            white-space: nowrap;
+        }
+
+        .op-desc {
+            color: #444;
+        }
+
+        .op-example {
+            color: var(--text-muted);
+            font-family: "IBM Plex Mono", monospace;
+            font-size: 12px;
+        }
+
+        /* Klavye kısayolları */
+        .key-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+        }
+
+        .key-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid var(--border-color);
+            padding: 10px 14px;
+            border-radius: 3px;
+        }
+
+        kbd {
+            font-family: "IBM Plex Mono", monospace;
+            font-size: 11.5px;
+            background: #2c3e50;
+            color: #fff;
+            padding: 3px 7px;
+            border-radius: 3px;
+            min-width: 22px;
+            text-align: center;
+        }
+
+        .key-desc {
+            font-size: 12.5px;
+            color: var(--text-muted);
+        }
+
+        /* SSS akordeon */
+        .faq-item {
+            border-bottom: 1px solid var(--line-color);
+        }
+
+        .faq-item:first-child {
+            border-top: 1px solid var(--line-color);
+        }
+
+        .faq-question {
+            width: 100%;
+            text-align: left;
+            background: none;
+            border: none;
+            padding: 14px 4px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a1a;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: inherit;
+        }
+
+        .faq-question:hover {
+            color: var(--primary-red);
+        }
+
+        .faq-icon {
+            font-family: "IBM Plex Mono", monospace;
+            color: var(--primary-red);
+            font-size: 15px;
+            flex-shrink: 0;
+            margin-left: 12px;
+            transition: transform 0.15s;
+        }
+
+        .faq-item.open .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.2s ease;
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 240px;
+        }
+
+        .faq-answer p {
+            font-size: 13px;
+            color: var(--text-muted);
+            padding: 0 4px 16px 4px;
+            max-width: 680px;
+        }
+
+        /* Yardım kutusu — hâlâ takıldıysanız */
+        .help-cta {
+            border: 1px solid var(--border-color);
+            border-left: 3px solid var(--primary-red);
+            padding: 18px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .help-cta p {
+            font-size: 13px;
+            color: #333;
+            max-width: 480px;
+        }
+
+        .help-cta a.top-btn-alt {
+            background-color: var(--primary-red);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 3px;
+            font-size: 13px;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .help-cta a.top-btn-alt:hover {
+            background-color: var(--dark-red);
+        }
+
+        @media (max-width: 900px) {
+            .help-layout { grid-template-columns: 1fr; }
+            .help-toc {
+                position: static;
+                border-right: none;
+                border-bottom: 1px solid var(--line-color);
+                padding-right: 0;
+                padding-bottom: 16px;
+            }
+            .key-grid { grid-template-columns: 1fr; }
+            .left-sidebar {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body id="sayfa-basi">
+
+    <!-- Üst Bilgi Çubuğu -->
+    <header class="top-bar">
+        <a href="/" class="brand-logo">
+            <div class="brand-symbol">
+                <svg viewBox="0 0 64 64" aria-hidden="true">
+                    <!-- Dış çerçeve -->
+                    <circle
+                        cx="32"
+                        cy="32"
+                        r="28"
+                        fill="rgba(255,255,255,.08)"
+                        stroke="#f0d49b"
+                        stroke-width="1.6"/>
+                    <!-- Açık kitap -->
+                    <path
+                        d="
+                        M16 21
+                        Q24 18 32 24
+                        Q40 18 48 21
+                        V44
+                        Q40 41 32 47
+                        Q24 41 16 44
+                        Z"
+                        fill="white"
+                        opacity=".99"/>
+                    <!-- Sayfa çizgisi -->
+                    <path
+                        d="M32 24 V47"
+                        stroke="#d9b76f"
+                        stroke-width="1.2"/>
+                    <!-- Hilal -->
+                    <circle
+                        cx="32"
+                        cy="32"
+                        r="7"
+                        fill="#b78d42"/>
+
+                    <circle
+                        cx="34.5"
+                        cy="32"
+                        r="5.5"
+                        fill="white"
+                        opacity=".99"/>
+                </svg>
+            </div>
+            <div class="brand-text">
+                <span class="brand-title">
+                    Türk Dili Sanal Sözlüğü
+                </span>
+                <span class="brand-subtitle">
+                    Türkçenin Dijital Hafızası
+                </span>
+            </div>
+        </a>
+        <nav class="top-nav">
+            <a href="#" class="top-link">
+                Erişilebilirlik
+            </a>
+        </nav>
+    </header>
+
+    <div class="container">
+
+        <div class="help-layout">
+
+            <!-- Sol: İçindekiler -->
+            <!-- Sol Panel: Sayfa İçi Gezinme (İki sayfada da ortak kullanım) -->
+            <aside class="left-sidebar">
+                <ul class="page-nav">
+                    <li><a href="#sayfa-basi">Sayfa Başı</a></li>
+                    <li><a href="#basit-arama">Basit Arama</a></li>
+                    <li><a href="#islecler">Gelişmiş İşleçler</a></li>
+                    <li><a href="#oneriler">Anlık Öneriler</a></li>
+                    <li><a href="#kisayollar">Klavye Kısayolları</a></li>
+                    <li><a href="#sss">SSS</a></li>
+                </ul>
+            </aside>
+
+            <!-- Sağ: İçerik -->
+            <main>
+                <div class="help-intro">
+                    <span class="help-eyebrow">Yardım</span>
+                    <h1>Arama kutusunu nasıl kullanırım?</h1>
+                    <p>
+                        TDSS arama kutusu, sözlük maddelerini tek bir yerden bulmanızı sağlar. 
+                        Aşağıda basit aramadan gelişmiş işleçlere, klavye kısayollarından 
+                        sık sorulan sorulara kadar arama kutusuyla ilgili
+                        her şeyi bulabilirsiniz.
+                    </p>
+                </div>
+
+                <!-- Basit Arama -->
+                <section class="help-section" id="basit-arama">
+                    <div class="section-heading">
+                        <h2>Basit Arama</h2>
+                        <span>/ nasıl başlanır</span>
+                    </div>
+                    <p>
+                        Sayfanın üstündeki arama kutusuna aradığınız sözcüğü yazıp
+                        <strong>Enter</strong>'a basın ya da kutunun yanındaki kırmızı arama
+                        düğmesine tıklayın. En az iki karakter yazdığınızda, kutunun altında
+                        eşleşen maddeler için anlık öneriler belirir.
+                    </p>
+                    <div class="demo-search">
+                        <input class="demo-input" type="text" value="sakarya" readonly>
+                        <div class="demo-btn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                        </div>
+                    </div>
+                    <p>
+                        Büyük/küçük harfler aramayı etkilemez ancak Türkçeye özgü harfler (ı, ğ, ş, ö, ü, ç) aramayı
+                        etkiler, <span class="op-code">sözlük</span> yerine
+                        <span class="op-code">sozluk</span> yazarsanız sonuç bulamazsınız.
+                    </p>
+                </section>
+
+                <!-- Gelişmiş İşleçler -->
+                <section class="help-section" id="islecler">
+                    <div class="section-heading">
+                        <h2>Gelişmiş İşleçler</h2>
+                        <span>/ daha isabetli sonuçlar için</span>
+                    </div>
+                    <p>
+                        Şuanda arama sistemimizde gelişmiş işleçler <span style="color: red; font-weight: 600;">bulunmuyor</span>.
+                    </p>
+                    <p>
+                        Aşağıdaki tabloda <span style="color: red; font-weight: 600;">gelecek için planlanan</span> bazı gelişmiş arama işleçlerini görebilirsiniz.
+                    </p>
+                    <table class="op-table">
+                        <thead>
+                            <tr>
+                                <th>İşleç</th>
+                                <th>Ne işe yarar</th>
+                                <th>Örnek</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="op-code">" "</span></td>
+                                <td class="op-desc">Tırnak içindeki öbeğin birebir eşleşmesini arar.</td>
+                                <td class="op-example">"göz ardı etmek"</td>
+                            </tr>
+                            <tr>
+                                <td><span class="op-code">*</span></td>
+                                <td class="op-desc">Sözcüğün eksik kısmı için joker karakter olarak kullanılır.</td>
+                                <td class="op-example">gör*mek</td>
+                            </tr>
+                            <tr>
+                                <td><span class="op-code">tur:</span></td>
+                                <td class="op-desc">Sonuçları sözcük türüne göre süzer (ad, sıfat, fiil vb.).</td>
+                                <td class="op-example">tur:fiil akış</td>
+                            </tr>
+                            <tr>
+                                <td><span class="op-code">alan:</span></td>
+                                <td class="op-desc">Sonuçları bir uzmanlık alanına göre süzer.</td>
+                                <td class="op-example">alan:matematik akışım</td>
+                            </tr>
+                            <tr>
+                                <td><span class="op-code">-</span></td>
+                                <td class="op-desc">Önüne konan sözcüğü sonuçlardan hariç tutar.</td>
+                                <td class="op-example">yol -yolculuk</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <!-- Anlık Öneriler -->
+                <section class="help-section" id="oneriler">
+                    <div class="section-heading">
+                        <h2>Anlık Öneriler</h2>
+                        <span>/ yazarken görünen liste</span>
+                    </div>
+                    <p>
+                        İki ya da daha fazla karakter yazdığınızda kutunun altında bir öneri listesi
+                        açılır. Her satırda madde ve maddenin türü gösterilir. Bu maddeler sözcük de
+                        söz öbeği de olabilir.
+                        
+                        <br> <br>
+                        Listedeki bir
+                        öneriye tıklamak sizi doğrudan ilgili sözlük maddesine götürür. Listenin
+                        dışına tıkladığınızda öneriler kapanır.
+                    </p>
+                </section>
+
+                <!-- Klavye Kısayolları -->
+                <section class="help-section" id="kisayollar">
+                    <div class="section-heading">
+                        <h2>Klavye Kısayolları</h2>
+                        <span>/ elinizi klavyeden kaldırmadan</span>
+                    </div>
+                    <div class="key-grid">
+                        <div class="key-row">
+                            <kbd>&darr;</kbd>
+                            <span class="key-desc">Öneri listesinde bir alt maddeye geçer.</span>
+                        </div>
+                        <div class="key-row">
+                            <kbd>&uarr;</kbd>
+                            <span class="key-desc">Öneri listesinde bir üst maddeye geçer.</span>
+                        </div>
+                        <div class="key-row">
+                            <kbd>Tab</kbd>
+                            <span class="key-desc">Seçili öneriyi kutuya yazdırır</span>
+                        </div>
+                        <div class="key-row">
+                            <kbd>Enter</kbd>
+                            <span class="key-desc">Seçili öneriyle aramayı başlatır.</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SSS -->
+                <section class="help-section" id="sss">
+                    <div class="section-heading">
+                        <h2>Sıkça Sorulan Sorular</h2>
+                        <span>/ arama hakkında</span>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" type="button">
+                            Aradığım sözcük hiç çıkmıyor, ne yapmalıyım?
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>
+                                Sözcüğü kısaltıp yeniden deneyin. Sözcük hâlâ
+                                bulunamıyorsa "İletişim ve Geri Bildirim" üzerinden bize
+                                bildirebilirsiniz; eksik maddeler değerlendirme listesine eklenir.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" type="button">
+                            Büyük harf veya noktalama arama sonucunu etkiler mi?
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>
+                                Arama büyük/küçük harf duyarlı değildir ancak noktalama
+                                işaretleri yok sayılmaz ve sonucu etkiler.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" type="button">
+                            Aynı anda birden fazla sözcük arayabilir miyim?
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>
+                                Hayır
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" type="button">
+                            Öneri listesi neden bazen boş kalıyor?
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>
+                                Girdiğiniz metinle eşleşen bir madde bulunamadığında liste boş
+                                kalır. Yazımı kontrol edin veya daha kısa bir kök ile aramayı
+                                deneyin.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Hâlâ yardıma mı ihtiyacınız var -->
+                <div class="help-cta">
+                    <p>
+                        Aradığınıza hâlâ ulaşamadınız mı? Bize yazın, size en kısa sürede dönüş
+                        yapalım. Maalesef şu anda çalışmıyor. İletişim bağlantıları sonra eklenecek.
+                    </p>
+                    <a class="top-btn-alt">İletişime Geçemiyorsunuz</a>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Alt Bilgi -->
+    <footer class="footer">
+        <div class="footer-pattern"></div>
+        <div class="container">
+            <div class="footer-header">
+                <div class="footer-logo">
+                    <div class="footer-title">
+                        Türk Dili Sanal Sözlüğü
+                    </div>
+                    <div class="footer-subtitle">
+                        TÜRKÇENİN DİJİTAL HAFIZASI
+                    </div>
+                </div>
+            </div>
+            <ul class="footer-links">
+                <li><a href="/hakkimizda/">Hakkımızda</a></li>
+                <li><a href="#">Belgelemeler</a></li>
+                <li><a href="#">Ağ Güncesi</a></li>
+                <li><a href="#">Gizlilik Sözleşmesi</a></li>
+                <li><a href="#">Kullanım Koşulları</a></li>
+                <li><a href="#">İletişim</a></li>
+                <li><a href="#">Künye</a></li>
+            </ul>
+            <div class="footer-bottom">
+                © 2026 TDSS • Türk Dili Sanal Sözlüğü
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.querySelectorAll('.page-nav a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelectorAll('.page-nav a').forEach(a => a.classList.remove('active'));
+                this.classList.add('active');
+                
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80, // Üst menü boşluğu
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        const sections = document.querySelectorAll(".help-section");
+        const navLinks = document.querySelectorAll(".page-nav a");
+
+        window.addEventListener("scroll", () => {
+            let current = "sayfa-basi";
+
+            sections.forEach(section => {
+                const top = section.offsetTop - 120;
+
+                if (window.scrollY >= top) {
+                    current = section.id;
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove("active");
+
+                if (link.getAttribute("href") === "#" + current) {
+                    link.classList.add("active");
+                }
+            });
+        });
+        
+        document.querySelectorAll(".faq-question").forEach(btn => {
+            btn.addEventListener("click", () => {
+                btn.parentElement.classList.toggle("open");
+            });
+        });
+    </script>
+
+</body>
+</html>

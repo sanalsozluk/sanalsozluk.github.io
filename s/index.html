@@ -13,23 +13,67 @@
     <script src="/js/api.js"></script>
     <script src="/js/main.js"></script>
 </head>
-<body>
+<body id="sayfa-basi">
 
     <!-- Üst Bilgi Çubuğu -->
     <header class="top-bar">
         <a href="/" class="brand-logo">
-            <div class="logo-letters">
-                <span class="logo-box">T</span>
-                <span class="logo-box">D</span>
-                <span class="logo-box">S</span>
-                <span class="logo-box">S</span>
+            <div class="brand-symbol">
+                <svg viewBox="0 0 64 64" aria-hidden="true">
+                    <!-- Dış çerçeve -->
+                    <circle
+                        cx="32"
+                        cy="32"
+                        r="28"
+                        fill="rgba(255,255,255,.08)"
+                        stroke="#f0d49b"
+                        stroke-width="1.6"/>
+                    <!-- Açık kitap -->
+                    <path
+                        d="
+                        M16 21
+                        Q24 18 32 24
+                        Q40 18 48 21
+                        V44
+                        Q40 41 32 47
+                        Q24 41 16 44
+                        Z"
+                        fill="white"
+                        opacity=".99"/>
+                    <!-- Sayfa çizgisi -->
+                    <path
+                        d="M32 24 V47"
+                        stroke="#d9b76f"
+                        stroke-width="1.2"/>
+                    <!-- Hilal -->
+                    <circle
+                        cx="32"
+                        cy="32"
+                        r="7"
+                        fill="#b78d42"/>
+
+                    <circle
+                        cx="34.5"
+                        cy="32"
+                        r="5.5"
+                        fill="white"
+                        opacity=".99"/>
+                </svg>
             </div>
-            <span class="brand-title">Türk Dili Sanal Sözlüğü</span>
+            <div class="brand-text">
+                <span class="brand-title">
+                    Türk Dili Sanal Sözlüğü
+                </span>
+                <span class="brand-subtitle">
+                    Türkçenin Dijital Hafızası
+                </span>
+            </div>
         </a>
-        <div class="top-nav">
-            <a href="#" class="top-btn">Uygulama</a>
-            <a href="#" class="top-btn">Oturum Aç</a>
-        </div>
+        <nav class="top-nav">
+            <a href="#" class="top-link">
+                Erişilebilirlik
+            </a>
+        </nav>
     </header>
 
     <div class="container">
@@ -44,13 +88,13 @@
                         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                     </svg>
                 </button>
-                <button class="help-btn" aria-label="Yardım">
+                <a href="/yardim/arama/" class="help-btn" aria-label="Yardım">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#495057" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="10"></circle>
                         <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
                         <line x1="12" y1="17" x2="12.01" y2="17"></line>
                     </svg>
-                </button>
+                </a>
                 <div id="search-suggestions" class="search-suggestions"></div>
             </div>
         </section>
@@ -61,9 +105,9 @@
         <div class="dict-layout">
             
             <!-- Sol Panel: Sayfa İçi Gezinme -->
-            <aside class="left-sidebar">
+             <aside class="left-sidebar">
                 <ul class="page-nav" id="scroll-spy-nav">
-                    <li data-section="baslangic"><a href="#baslangic" class="active">Sayfa Başı</a></li>
+                    <li data-section="sayfa-basi"><a href="#sayfa-basi" class="active">Sayfa Başı</a></li>
                     <li data-section="anlamlar"><a href="#anlamlar">Anlamlar</a></li>
                     <li data-section="kokenbilimi"><a href="#kokenbilimi">Kökenbilim</a></li>
                     <li data-section="esdizimler"><a href="#esdizimler">Tipik Eşdizimler</a></li>
@@ -73,6 +117,20 @@
 
             <!-- Orta Panel: Dinamik İçerik Alanı -->
             <main class="main-content">
+
+                <div id="welcome-page" class="welcome-card">
+                    <div class="welcome-icon">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#0056b3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                        </svg>
+                    </div>
+                    <h2 class="welcome-title">Türk Dili Sanal Sözlüğüne Hoş Geldiniz</h2>
+                    <p class="welcome-text">
+                        Kapsamlı veri tabanımızda çözümleme yapmak için yukarıdaki arama çubuğunu kullanabilirsiniz.
+                        <br>Sözcüklerin kökenbilimini, eşdizimlerini ve kullanım örneklerini burada keşfedin.
+                    </p>
+                </div>
 
                 <div id="entry-selector" class="entry-selector hidden">
 
@@ -111,7 +169,7 @@
                     </div>
                 </div>
 
-                <div id="entry-page">
+                <div class="entry-page" id="entry-page">
 
                     <!-- mevcut içerik -->
 
@@ -121,7 +179,7 @@
                         <!-- API'den doldurulacak başlık -->
                         <h1 class="word-title" data-api="word-title">Yükleniyor...</h1>
                         <div class="update-date">
-                            <!--  Şimdilik boş ilerde belki bir şeyler gelir aklıma -->
+                            <!--  Şimdilik boş ilerde belki bir şeyler gelir aklıma. Ve geldi burda artık son güncelleme tarihi olacak. -->
                         </div>
                     </div>
 
@@ -152,7 +210,7 @@
                         <span>Sözcük Sıklığı</span>
                         <a href="#">Bu nedir?</a>
                     </div>
-                    <div class="chart-placeholder">
+                    <div class="chart-placeholder" style="position: relative;">
                         <svg width="100%" height="80" viewBox="0 0 200 80">
                             <!-- Örnek Çubuk Grafik -->
                             <rect x="10" y="50" width="20" height="30" fill="#0056b3" />
@@ -162,6 +220,7 @@
                             <rect x="130" y="30" width="20" height="50" fill="#0056b3" />
                             <rect x="160" y="45" width="20" height="35" fill="#0056b3" />
                         </svg>
+                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 13px; font-weight: 600;">Yakında Gelecek</div>
                     </div>
                     <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); margin-top: 5px;">
                         <span>seyrek</span>
@@ -174,7 +233,7 @@
                         <span>Coğrafi Dağılım</span>
                         <a href="#">Bu nedir?</a>
                     </div>
-                    <div class="chart-placeholder" style="height: 200px;">
+                    <div class="chart-placeholder" style="height: 200px; position: relative;">
                         <svg width="100%" height="100%" viewBox="0 0 200 200">
                             <!-- Türkiye Haritası Temsili -->
                             <path d="M 20,80 Q 50,60 100,70 T 180,90 Q 190,120 150,140 T 40,130 Z" fill="#e9ecef" stroke="#ced4da" stroke-width="2"/>
@@ -183,6 +242,7 @@
                             <rect x="120" y="85" width="4" height="35" fill="#0056b3" />
                             <rect x="160" y="100" width="4" height="15" fill="#0056b3" />
                         </svg>
+                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 13px; font-weight: 600;">Yakında Gelecek</div>
                     </div>
                 </div>
 
@@ -190,11 +250,12 @@
                     <div class="widget-header">
                         <span>Zaman Eğrisi</span>
                     </div>
-                    <div class="chart-placeholder">
+                    <div class="chart-placeholder" style="position: relative;">
                         <svg width="100%" height="80" viewBox="0 0 200 80">
                             <!-- Çizgi Grafik -->
                             <polyline points="0,70 30,65 60,40 90,55 120,20 150,25 180,10 200,15" fill="none" stroke="#c8102e" stroke-width="2"/>
                         </svg>
+                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 13px; font-weight: 600;">Yakında Gelecek</div>
                     </div>
                     <div style="font-size: 11px; color: var(--text-muted); margin-top: 8px; text-align: center;">
                         1930 - 2026 arası kullanım sıklığı
@@ -205,6 +266,35 @@
 
         </div>
     </div>
+
+    <!-- Alt Bilgi (Footer) -->
+    <footer class="footer">
+        <div class="footer-pattern"></div>
+        <div class="container">
+            <div class="footer-header">
+                <div class="footer-logo">
+                    <div class="footer-title">
+                        Türk Dili Sanal Sözlüğü
+                    </div>
+                    <div class="footer-subtitle">
+                        TÜRKÇENİN DİJİTAL HAFIZASI
+                    </div>
+                </div>
+            </div>
+            <ul class="footer-links">
+                <li><a href="/hakkimizda/">Hakkımızda</a></li>
+                <li><a href="#">Belgelemeler</a></li>
+                <li><a href="#">Ağ Güncesi</a></li>
+                <li><a href="#">Gizlilik Sözleşmesi</a></li>
+                <li><a href="#">Kullanım Koşulları</a></li>
+                <li><a href="#">İletişim</a></li>
+                <li><a href="#">Künye</a></li>
+            </ul>
+            <div class="footer-bottom">
+                © 2026 TDSS • Türk Dili Sanal Sözlüğü
+            </div>
+        </div>
+    </footer>
 
     <!-- Modüler Yapı ve Arayüz İşlemleri için JavaScript -->
     <script>
@@ -224,6 +314,29 @@
                         top: targetElement.offsetTop - 80, // Üst menü boşluğu
                         behavior: 'smooth'
                     });
+                }
+            });
+        });
+
+        const sections = document.querySelectorAll(".section-title");
+        const navLinks = document.querySelectorAll(".page-nav a");
+
+        window.addEventListener("scroll", () => {
+            let current = "sayfa-basi";
+
+            sections.forEach(section => {
+                const top = section.offsetTop - 120;
+
+                if (window.scrollY >= top) {
+                    current = section.id;
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove("active");
+
+                if (link.getAttribute("href") === "#" + current) {
+                    link.classList.add("active");
                 }
             });
         });
@@ -414,6 +527,12 @@
         // DOM yüklendiğinde API verisini sayfaya basan işlev
         function renderMadde(madde, toplamMadde){
 
+            document.getElementById("welcome-page").style.display = "none";
+    
+            // Paneller tekrar görünür yapılıyor
+            document.querySelector(".left-sidebar").style.visibility = "visible";
+            document.getElementById("right-sidebar").style.visibility = "visible";
+
             document.getElementById("scroll-spy-nav").style.display="";
             
             document.getElementById("overview-page").style.display="none";
@@ -559,6 +678,19 @@
             const input = document.getElementById("search-input");
             input.focus();
             input.setSelectionRange(input.value.length, input.value.length);
+
+            // display: none YERİNE visibility: hidden KULLANILIYOR
+            // Böylece ögeler yer tutmaya devam eder, orta alan kaymaz.
+            document.querySelector(".left-sidebar").style.visibility = "hidden";
+            document.getElementById("right-sidebar").style.visibility = "hidden";
+            
+            // Orta paneldeki diğer içerikleri tamamen kapatıyoruz
+            document.getElementById("entry-page").style.display = "none";
+            document.getElementById("overview-page").style.display = "none";
+            document.getElementById("not-found-page").style.display = "none";
+            
+            // Yalnızca karşılama ekranını açıyoruz
+            document.getElementById("welcome-page").style.display = "flex";
             //loadFromUrl();
         });
 
@@ -681,6 +813,11 @@
         }
 
         function renderGenelBakis(maddeler){
+
+            document.getElementById("welcome-page").style.display = "none";
+    
+            // Genel bakışta sol menü işlevsizdir ancak sayfa düzeninin kaymaması için yer tutmalıdır
+            document.getElementById("right-sidebar").style.visibility = "visible";
 
             document.getElementById("overview-page").style.display="";
             document.getElementById("entry-page").style.display="none";
@@ -868,13 +1005,20 @@
             }
 
             else if(e.key==="Tab"){
-
-                if(selectedIndex>=0){
-
+                if(selectedIndex >= 0) {
                     e.preventDefault();
-
-                    items[selectedIndex].click();
-
+                    
+                    // Tıklama olayını tetiklemeden sadece kelimeyi input kutusuna yaz
+                    const secilenKelime = items[selectedIndex].querySelector(".search-word").textContent;
+                    input.value = secilenKelime;
+                    
+                    // Öneriler kutusunu kapat ve seçimi sıfırla
+                    suggestionBox.classList.remove("show");
+                    selectedIndex = -1;
+                    
+                    // İmleci inputun sonuna taşı
+                    input.focus();
+                    input.setSelectionRange(input.value.length, input.value.length);
                 }
             }
 

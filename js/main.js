@@ -19,8 +19,26 @@ function loadFromUrl() {
     if (kelime) {
         kelimeVerisiniGetir(kelime);
     } else {
-        // Kelime yoksa ve anasayfadaysak sahte veriyi (veya varsayılan durumu) yükle
-        olusturSekmeler(apiDummyData);
+        // Kelime yoksa (anasayfadaysak) sağ/sol panelleri gizle, karşılama ekranını göster
+        const entrySelector = document.getElementById("entry-selector");
+        const overviewPage = document.getElementById("overview-page");
+        const entryPage = document.getElementById("entry-page");
+        const notFoundPage = document.getElementById("not-found-page");
+        const leftsidebar = document.getElementById("left-sidebar");
+        const rightSidebar = document.getElementById("right-sidebar");
+        const welcomePage = document.getElementById("welcome-page");
+
+        if (entrySelector) entrySelector.classList.add("hidden");
+        if (overviewPage) overviewPage.style.display = "none";
+        if (entryPage) entryPage.style.display = "none";
+        if (notFoundPage) notFoundPage.style.display = "none";
+        
+        // Panellerin yer kaydırmaması için visibility hidden kullanıyoruz
+        if (leftsidebar) leftsidebar.style.visibility = "hidden";
+        if (rightSidebar) rightSidebar.style.visibility = "hidden";
+
+        // Karşılama ekranını görünür yap
+        if (welcomePage) welcomePage.style.display = "flex";
     }
 }
 
@@ -34,15 +52,22 @@ async function kelimeVerisiniGetir(kelime) {
     const notFoundPage = document.getElementById("not-found-page");
     const scrollSpyNav = document.getElementById("scroll-spy-nav");
     const rightSidebar = document.getElementById("right-sidebar");
+    const welcomePage = document.getElementById("welcome-page");
 
+    // KELİME BULUNAMADI DURUMU
     // KELİME BULUNAMADI DURUMU
     if (!veri || !veri.maddeler || veri.maddeler.length === 0) {
         // İlgisiz tüm panelleri gizle
         if (entrySelector) entrySelector.classList.add("hidden");
         if (overviewPage) overviewPage.style.display = "none";
-        if (entryPage) entryPage.style.display = "none";
-        if (scrollSpyNav) scrollSpyNav.style.display = "none";
-        if (rightSidebar) rightSidebar.style.display = "none";
+        if (entryPage) overviewPage.style.display = "none";
+        
+        // display: none yerine visibility: hidden kullanarak alanın kapanmasını ve alt bilginin yukarı kaymasını önle
+        const leftSidebar = document.querySelector(".left-sidebar");
+        if (leftSidebar) leftSidebar.style.visibility = "hidden";
+        if (scrollSpyNav) scrollSpyNav.style.visibility = "hidden";
+        if (rightSidebar) rightSidebar.style.visibility = "hidden";
+        if (welcomePage) welcomePage.style.display = "none";
 
         // Bulunamadı kartındaki metni dinamik doldur ve görünür yap
         const notFoundWordEl = document.getElementById("not-found-word");
@@ -57,10 +82,17 @@ async function kelimeVerisiniGetir(kelime) {
     // 1. Önce hata ekranını gizle
     if (notFoundPage) notFoundPage.style.display = "none";
 
-    // 2. Gizlediğin tüm yapıları css varsayılanlarına döndür (sıfırla)
-    // style.display içine "" (boş metin) atamak, satır içi stili siler ve css dosyasındaki kuralların geçerli olmasını sağlar.
-    if (rightSidebar) rightSidebar.style.display = "";
-    if (scrollSpyNav) scrollSpyNav.style.display = "";
+    // 2. Gizlediğin tüm yapıları css varsayılanlarına döndür ve görünür yap
+    if (rightSidebar) {
+        rightSidebar.style.display = "";
+        rightSidebar.style.visibility = "visible";
+    }
+    const leftSidebar = document.querySelector(".left-sidebar");
+    if (leftSidebar) leftSidebar.style.visibility = "visible";
+    if (scrollSpyNav) {
+        scrollSpyNav.style.display = "";
+        scrollSpyNav.style.visibility = "visible";
+    }
     if (overviewPage) overviewPage.style.display = "";
     if (entryPage) entryPage.style.display = "";
     

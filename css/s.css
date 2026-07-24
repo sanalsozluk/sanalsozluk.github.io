@@ -24,28 +24,137 @@ body {
 }
 
 /* Üst Bilgi Çubuğu (index.html ile birebir aynı) */
-.top-bar {
-    background-color: var(--primary-red);
-    color: white;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 6px 24px;
-    font-size: 14px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
+.top-bar{
+    position:relative;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:14px 34px;
+    color:#fff;
+    overflow:hidden;
+    background:
+        linear-gradient(
+            135deg,
+            #821818 0%,
+            #a32121 45%,
+            #8b1717 100%
+        );
+
+    border-bottom:2px solid #c6a65a;
+    box-shadow:
+        0 3px 10px rgba(0,0,0,.12);
 }
 
-.brand-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: white; }
-.logo-letters { display: flex; gap: 2px; }
-.logo-box { background-color: white; color: var(--primary-red); font-weight: 800; font-size: 18px; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; border-radius: 2px; }
-.brand-title { font-family: "IBM Plex Sans", sans-serif; font-weight: 500; font-size: 15px; letter-spacing: 0.3px; }
-.top-nav { display: flex; gap: 10px; }
-.top-btn { background: rgba(255, 255, 255, 0.15); color: white; border: 1px solid rgba(255, 255, 255, 0.3); padding: 4px 12px; border-radius: 3px; font-size: 13px; cursor: pointer; text-decoration: none; transition: background 0.2s; }
-.top-btn:hover { background: rgba(255, 255, 255, 0.3); }
+/* hafif Türk geometrik deseni */
+.top-bar::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    opacity:.09;
+    background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cg fill='none' stroke='white' stroke-width='1'%3E%3Cpath d='M60 10L80 30L60 50L40 30Z'/%3E%3Cpath d='M60 70L80 90L60 110L40 90Z'/%3E%3Cpath d='M10 60L30 40L50 60L30 80Z'/%3E%3Cpath d='M70 60L90 40L110 60L90 80Z'/%3E%3C/g%3E%3C/svg%3E");
+    background-size:140px;
+}
 
-.container { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
+/* altın çizgi */
+.top-bar::after{
+    content:"";
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:0;
+    height:1px;
+    background:
+
+        rgba(255,255,255,.15);
+}
+
+/* -------------------------------------- */
+.brand-logo{
+    display:flex;
+    align-items:center;
+    gap:18px;
+    color:white;
+    text-decoration:none;
+}
+
+.brand-symbol{
+    width:54px;
+    height:54px;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            rgba(255,255,255,.12),
+            rgba(255,255,255,.04)
+        );
+    backdrop-filter:blur(3px);
+    box-shadow:
+        0 4px 12px rgba(0,0,0,.18);
+}
+
+.brand-symbol svg{
+    width:46px;
+    height:46px;
+}
+
+/* yazılar */
+.brand-text{
+    display:flex;
+    flex-direction:column;
+    gap:3px;
+}
+
+.brand-title{
+    font-family:"Source Serif 4", serif;
+    font-size:25px;
+    font-weight:600;
+    line-height:1;
+}
+
+.brand-subtitle{
+    font-size:8px;
+    letter-spacing:3px;
+    text-transform:uppercase;
+    color:#f0d49b;
+}
+
+/* -------------------------------------- */
+.top-nav{
+    display:flex;
+    align-items:center;
+    gap:16px;
+}
+
+/* erişilebilirlik */
+.top-link{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:4px 16px;
+    border-radius:1px;
+    color:white;
+    text-decoration:none;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.12);
+    transition:.25s;
+    backdrop-filter:blur(4px);
+}
+
+.top-link:hover{
+    background:rgba(255,255,255,.16);
+}
+
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
 
 /* Arama Alanı (index.html ile birebir aynı) */
 .search-section { margin: 25px 0 35px 0; max-width: 100%; display: flex; justify-content: center; }
@@ -125,6 +234,41 @@ body {
 .help-btn { background-color: #f1f3f5; border: 1px solid #ccc; width: 38px; height: 38px; border-radius: 0px; cursor: pointer; display: flex; align-items: center; justify-content: center; border-left: none; }
 .help-btn:hover { background-color: #e9ecef; }
 
+.welcome-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 20px;
+    background-color: #ffffff;
+    border: 1px solid #e1e4e8;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    margin-top: 20px;
+    height: 100%;
+    min-height: 400px;
+}
+
+.welcome-icon {
+    margin-bottom: 20px;
+    opacity: 0.8;
+}
+
+.welcome-title {
+    font-size: 24px;
+    color: #24292f;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.welcome-text {
+    font-size: 16px;
+    color: #57606a;
+    max-width: 500px;
+    line-height: 1.6;
+}
+
 .entry-selector{
     margin-top:14px;
     margin-bottom:22px;
@@ -173,7 +317,8 @@ body {
 /* Sol Panel: Gezinme (Kısayollar) */
 .left-sidebar {
     position: sticky;
-    top: 60px; /* Üst çubuğun altında kalacak şekilde */
+    top: 20px;
+    align-self: start;
 }
 
 .page-nav { list-style: none; border-left: 2px solid var(--border-color); }
@@ -323,7 +468,86 @@ body {
     justify-content: center;
 }
 
+/* Alt Bilgi */
+.footer{
+    position:relative;
+    overflow:hidden;
+    margin-top:60px;
+    background:
+        linear-gradient(
+            180deg,
+            #8d1d1d,
+            #6d1414
+        );
+    color:white;
+    border-top:3px solid #c8a04d;
+}
 
+/* Türk geometrik deseni */
+.footer::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    opacity:.08;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cg fill='none' stroke='white' stroke-width='1.4'%3E%3Cpath d='M60 10L80 30L60 50L40 30Z'/%3E%3Cpath d='M60 70L80 90L60 110L40 90Z'/%3E%3Cpath d='M10 60L30 40L50 60L30 80Z'/%3E%3Cpath d='M70 60L90 40L110 60L90 80Z'/%3E%3C/g%3E%3C/svg%3E");
+    background-size:120px;
+    pointer-events:none;
+}
+
+.footer .container{
+    position:relative;
+    z-index:2;
+    padding:45px 20px;
+}
+
+.footer-header{
+    text-align:center;
+    margin-bottom:35px;
+}
+
+.footer-title{
+    font-family:"Cormorant Garamond",serif;
+    font-size:34px;
+    font-weight:700;
+    color:white;
+}
+
+.footer-subtitle{
+    margin-top:8px;
+    font-size:12px;
+    letter-spacing:5px;
+    color:#e5c984;
+}
+
+.footer-links{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:24px;
+    list-style:none;
+    margin:0;
+    padding:30px 0;
+    border-top:1px solid rgba(255,255,255,.15);
+    border-bottom:1px solid rgba(255,255,255,.15);
+
+}
+
+.footer-links a{
+    color:#f8edd3;
+    text-decoration:none;
+    transition:.25s;
+}
+
+.footer-links a:hover{
+    color:white;
+}
+
+.footer-bottom{
+    text-align:center;
+    margin-top:25px;
+    color:#e8d6aa;
+    font-size:13px;
+}
 
 /* Mobil Uyum */
 @media (max-width: 992px) {
